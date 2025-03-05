@@ -1,6 +1,4 @@
-package com.backend_app.Festival_Planning_App.User;
-
-
+package com.backend.backend.user;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,5 +9,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

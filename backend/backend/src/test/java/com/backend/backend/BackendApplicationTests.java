@@ -1,10 +1,10 @@
-package com.backend_app.Festival_Planning_App;
+package com.backend.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FestivalPlanningAppApplicationTests {
+class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {

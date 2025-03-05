@@ -1,13 +1,13 @@
-package com.backend_app.Festival_Planning_App;
+package com.backend.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FestivalPlanningAppApplication {
+public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FestivalPlanningAppApplication.class, args);
+		SpringApplication.run(BackendApplication.class, args);
 	}
 
 }
