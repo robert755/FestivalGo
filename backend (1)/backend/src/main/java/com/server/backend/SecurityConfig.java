@@ -20,7 +20,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login", "/register").permitAll()  // Permite accesul la login și register
+                        .requestMatchers("/users/login", "/users/register").permitAll()  // Permite accesul la login și register
                         .anyRequest().authenticated()  // Restul necesită autentificare
                 )
                 .formLogin(form -> form

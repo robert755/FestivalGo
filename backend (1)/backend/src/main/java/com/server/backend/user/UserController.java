@@ -17,7 +17,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping
+    @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
         // Criptăm parola înainte de a salva utilizatorul în baza de date
         user.setPassword(passwordEncoder.encode(user.getPassword()));
