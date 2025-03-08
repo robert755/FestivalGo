@@ -1,17 +1,24 @@
-package com.backend.backend.user;
+package com.server.backend.user;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -22,11 +29,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.PERSON;
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
 
-
-
+    @Enumerated(EnumType.STRING)
+    private Role role; // Vom crea enum-ul imediat
 }
