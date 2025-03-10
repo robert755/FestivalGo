@@ -11,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    // Definirea unui encoder de parolă folosind BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -19,22 +21,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/users/login", "/users/register").permitAll()  // Permite accesul la login și register
-                        .anyRequest().authenticated()  // Restul necesită autentificare
+                        .anyRequest().permitAll()  // Permite accesul pentru toate cererile
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")  // Pagină de login personalizată
-                        .permitAll()  // Permite accesul la pagina de login
+                        .loginPage("/register")  // Pagina de login personalizată
+                        .permitAll()  // Permite accesul la pagina de login pentru toți utilizatorii
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")  // URL-ul pentru logout (poți schimba acest lucru)
-                        .logoutSuccessUrl("/login?logout")  // Redirecționează utilizatorul după logout
-                        .permitAll()  // Permite accesul la logout pentru toți utilizatorii
+                        .logoutUrl("/logout")  // URL-ul pentru logout
+                        .logoutSuccessUrl("/login?logout")  // Redirect după logout
+                        .permitAll()
                 );
 
         return http.build();
     }
-
 
 }

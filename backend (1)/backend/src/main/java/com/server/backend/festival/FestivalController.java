@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/festivals")
+@RequestMapping("/festivals")
 public class FestivalController {
 
     @Autowired
     private FestivalService festivalService;
 
     // POST - Creare Festival
-    @PostMapping
-    public ResponseEntity<Festival> createFestival(@RequestBody Festival festival) {
-        Festival createdFestival = festivalService.createFestival(festival);
-        return new ResponseEntity<>(createdFestival, HttpStatus.CREATED);
+    @PostMapping("/post")
+    public Festival createFestival(@RequestBody Festival newFestival){
+        return festivalService.createFestival(newFestival);
     }
 
     // GET - Obține toate Festivalurile

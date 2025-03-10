@@ -1,4 +1,5 @@
 package com.server.backend.festival;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,23 @@ public class FestivalService {
     @Autowired
     private FestivalRepository festivalRepository;
 
-    // Creare Festival
+    @Transactional
     public Festival createFestival(Festival festival) {
-        return festivalRepository.save(festival);
+        // Creăm un nou obiect Festival și setăm valorile
+        Festival newFestival = new Festival();
+
+        // Folosim 'this' pentru a seta valorile câmpurilor din obiectul 'newFestival'
+        newFestival.setName(festival.getName());
+        newFestival.setLocation(festival.getLocation());
+        newFestival.setDescription(festival.getDescription());
+        newFestival.setStartDate(festival.getStartDate());
+        newFestival.setEndDate(festival.getEndDate());
+
+        // Salvează obiectul 'newFestival' în baza de date
+        return festivalRepository.save(newFestival);
     }
 
-    // Citire toate Festivalurile
+    @Transactional
     public List<Festival> getAllFestivals() {
         return festivalRepository.findAll();
     }
@@ -26,7 +38,8 @@ public class FestivalService {
         return festivalRepository.findById(id);
     }
 
-    // Actualizare Festival
+
+    @Transactional
     public Festival updateFestival(Integer id, Festival festivalDetails) {
         if (festivalRepository.existsById(id)) {
             festivalDetails.setId(id);  // Setăm id-ul pentru a face update
@@ -35,7 +48,7 @@ public class FestivalService {
         return null; // Poți arunca o excepție în loc, dacă dorești
     }
 
-    // Ștergere Festival
+    @Transactional
     public void deleteFestival(Integer id) {
         festivalRepository.deleteById(id);
     }

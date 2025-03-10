@@ -1,41 +1,94 @@
 package com.server.backend.user;
 
+import com.server.backend.participare.Participare;
 import jakarta.persistence.*;
-import lombok.*;
+
+import java.util.List;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    public void setPassword(String password) {
+    private String username;
+    private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    // Constructori
+    public User() {}
+    public User(String username, String email, String password, String firstName, String lastName, Role role) {
+        this.username = username;
+        this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
+    // Getters și Setters
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    @Column(nullable = false, unique = true)
-    private String username;
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    public String getFirstName() {
+        return firstName;
+    }
 
-    @Column(nullable = false)
-    private String password;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    @Column(nullable = false)
-    private String firstName;
+    public String getLastName() {
+        return lastName;
+    }
 
-    @Column(nullable = false)
-    private String lastName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
+    public Role getRole() {
+        return role;
+    }
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // Vom crea enum-ul imediat
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Participare> participari;
 }

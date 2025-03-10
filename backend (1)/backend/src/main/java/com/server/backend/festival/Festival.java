@@ -1,36 +1,89 @@
 package com.server.backend.festival;
 
+import com.server.backend.participare.Participare;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Festival {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
+    private String location;
+
+    private String description;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    // Constructor fără parametri
+    public Festival() {
+    }
+
+    // Constructor cu parametri
+    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate) {
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    // Getters și Setters
+    public Integer getId() {
+        return id;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
 
-    @Column(nullable = false)
-    private String name;
+    public String getName() {
+        return name;
+    }
 
-    @Column(nullable = false)
-    private String location;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    @Column(nullable = false)
-    private String description;
+    public String getLocation() {
+        return location;
+    }
 
-    @Column(nullable = false)
-    private LocalDate startDate;
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-    @Column(nullable = false)
-    private LocalDate endDate;
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    @OneToMany(mappedBy = "festival")
+    private List<Participare> participari;
 }

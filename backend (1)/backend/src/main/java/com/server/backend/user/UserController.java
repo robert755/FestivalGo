@@ -34,4 +34,9 @@ public class UserController {
             return "Eroare la autentificare!";
         }
     }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
