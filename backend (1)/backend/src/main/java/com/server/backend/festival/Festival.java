@@ -21,18 +21,20 @@ public class Festival {
     private LocalDate startDate;
 
     private LocalDate endDate;
-
+    @Enumerated(EnumType.STRING)
+      private Genre  genre;
     // Constructor fără parametri
     public Festival() {
     }
 
     // Constructor cu parametri
-    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate) {
+    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate,Genre genre) {
         this.name = name;
         this.location = location;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.genre= genre;
     }
 
     // Getters și Setters
@@ -82,6 +84,14 @@ public class Festival {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
     }
 
     @OneToMany(mappedBy = "festival")
