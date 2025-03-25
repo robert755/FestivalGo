@@ -1,5 +1,6 @@
 package com.server.backend.user;
 
+import com.server.backend.festival.Genre;
 import com.server.backend.participare.Participare;
 import jakarta.persistence.*;
 
@@ -17,9 +18,11 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private Genre preferredGenre;
 
     // Constructori
     public User() {}
@@ -87,6 +90,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+    public Genre getPreferredGenre() {
+        return preferredGenre;
+    }
+
+    public void setPreferredGenre(Genre preferredGenre) {
+        this.preferredGenre = preferredGenre;
     }
 
     @OneToMany(mappedBy = "user")

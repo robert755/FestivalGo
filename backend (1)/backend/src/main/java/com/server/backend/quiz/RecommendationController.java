@@ -16,8 +16,10 @@ public class RecommendationController {
         this.genreCalculatorService = genreCalculatorService;
     }
 
-    @PostMapping("/calculate")
-    public Genre calculatePreferredGenre(@RequestBody List<UserAnswerDTO> userAnswers) {
-        return genreCalculatorService.calculateGenre(userAnswers);
+    @PostMapping("/calculate/{userId}")
+    public Genre calculateAndSave(@PathVariable Integer userId,
+                                  @RequestBody List<UserAnswerDTO> answers) {
+        return genreCalculatorService.calculateAndSaveGenre(userId, answers);
     }
+
 }

@@ -23,16 +23,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .anyRequest().permitAll()  // Permite accesul pentru toate cererile
-                )
-                .formLogin(form -> form
-                        .loginPage("/register")  // Pagina de login personalizată
-                        .permitAll()  // Permite accesul la pagina de login pentru toți utilizatorii
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")  // URL-ul pentru logout
-                        .logoutSuccessUrl("/login?logout")  // Redirect după logout
-                        .permitAll()
+                        .anyRequest().permitAll()
                 );
 
         return http.build();

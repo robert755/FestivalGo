@@ -21,7 +21,7 @@ public class UserController {
     public String registerUser(@RequestBody User user) {
         // Criptăm parola înainte de a salva utilizatorul în baza de date
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
+        user.setRole(Role.USER);
         userService.createUser(user);
         return "User registered successfully";
     }
