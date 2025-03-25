@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -25,15 +27,22 @@ public class UserController {
         userService.createUser(user);
         return "User registered successfully";
     }
-
     @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password) {
-        if (userService.authenticate(username, password)) {
-            return "Autentificare reușită!";
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        User user = userService.findByUsername(request.getUsername());
+
+        if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("id", user.getId());
+            response.put("username", user.getUsername());
+            response.put("role", user.getRole());
+            return ResponseEntity.ok(response);
         } else {
-            return "Eroare la autentificare!";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autentificare eșuată!");
         }
     }
+
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

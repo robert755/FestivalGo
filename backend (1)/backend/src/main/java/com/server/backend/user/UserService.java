@@ -17,14 +17,12 @@ public class UserService {
 
    @Transactional
     public User createUser(User user) {
-        // Criptăm parola înainte de a o salva
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
 
         // Creăm un nou obiect User și setăm manual fiecare câmp
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setEmail(user.getEmail());
-        newUser.setPassword(encodedPassword);  // Parola criptată
+        newUser.setPassword(user.getPassword());
         newUser.setFirstName(user.getFirstName());
         newUser.setLastName(user.getLastName());
         newUser.setRole(user.getRole());
@@ -37,12 +35,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public boolean authenticate(String username, String password) {
-        User user = userRepository.findByUsername(username);
-
-        // Verifică dacă utilizatorul există și dacă parola introdusă corespunde cu cea criptată
-        return user != null && passwordEncoder.matches(password, user.getPassword());
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
+
+
     @Transactional
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
