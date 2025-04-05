@@ -23,6 +23,7 @@ public class FestivalService {
         newFestival.setDescription(festival.getDescription());
         newFestival.setStartDate(festival.getStartDate());
         newFestival.setEndDate(festival.getEndDate());
+        newFestival.setImagePath(festival.getImagePath());
         newFestival.setGenre(festival.getGenre());
         // Salvează obiectul 'newFestival' în baza de date
         return festivalRepository.save(newFestival);

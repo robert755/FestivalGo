@@ -56,8 +56,12 @@ const login = async () => {
     localStorage.setItem('username', res.data.username)
     localStorage.setItem('role', res.data.role)
 
-    // 🔁 Redirecționare către pagina cu festivaluri
-    router.push('/festivals')
+      // 🔁 Redirecționare în funcție de rol
+      if (res.data.role === 'ADMIN') {
+      router.push('/admin')
+    } else if (res.data.role === 'USER') {
+      router.push('/festivals')
+    }
   } catch (err) {
     error.value = 'Autentificare eșuată. Verifică datele!'
     console.error(err)
