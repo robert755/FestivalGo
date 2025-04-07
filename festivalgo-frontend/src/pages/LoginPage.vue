@@ -60,7 +60,7 @@ const login = async () => {
       if (res.data.role === 'ADMIN') {
       router.push('/admin')
     } else if (res.data.role === 'USER') {
-      router.push('/festivals')
+      router.push('/welcome')
     }
   } catch (err) {
     error.value = 'Autentificare eșuată. Verifică datele!'

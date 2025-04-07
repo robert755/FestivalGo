@@ -24,8 +24,8 @@ public class ParticipareService {
     public List<Participare> getAllParticipari() {
         return participareRepository.findAll();
     }
-    public Optional<Participare> getParticipareById(Integer id) {
-        return participareRepository.findById(id);
+    public List<Festival> getFestivaluriByUser(Integer userId) {
+        return participareRepository.findFestivaluriByUserId(userId);
     }
 
     @Transactional

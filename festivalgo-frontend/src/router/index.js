@@ -1,16 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginPage from '../pages/LoginPage.vue'
 import RegisterPage from '../pages/RegisterPage.vue'
+import WelcomePage from '../pages/WelcomePage.vue'
 import FestivalList from '../pages/FestivalList.vue'
 import AdminPage from '../pages/AdminPage.vue'
 import Add_Festival from '../pages/Add_Festival.vue'
 import FestivalMap from '../pages/FestivalMap.vue' // ⬅️ nou
+import FestivalDetails from '../pages/FestivalDetails.vue'
+import UserParticipations from '../pages/UserParticipations.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginPage },
   { path: '/register', component: RegisterPage },
+  {path: '/welcome',component:WelcomePage,meta: { requiresAuth: true, role: 'USER' }},
   { path: '/festivals', component: FestivalList, meta: { requiresAuth: true, role: 'USER' } },
+  { path: '/festival/:id', component: FestivalDetails, meta: { requiresAuth: true, role: 'USER' } },
+  {path: '/my-participations',component: UserParticipations,meta: { requiresAuth: true, role: 'USER' }},
   { path: '/admin', component: AdminPage, meta: { requiresAuth: true, role: 'ADMIN' } },
   { path: '/admin/add-festival', component: Add_Festival, meta: { requiresAuth: true, role: 'ADMIN' } },
   { path: '/festival-map/:id', component: FestivalMap, props: true, meta: { requiresAuth: true, role: 'ADMIN' } } // ⬅️ adăugat

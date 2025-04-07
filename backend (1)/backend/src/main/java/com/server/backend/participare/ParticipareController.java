@@ -1,5 +1,6 @@
 package com.server.backend.participare;
 
+import com.server.backend.festival.Festival;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +21,10 @@ public class ParticipareController {
         return participareService.getAllParticipari();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Participare> getParticipareById(@PathVariable Integer id) {
-        Optional<Participare> participare = participareService.getParticipareById(id);
-        return participare.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Festival>> getFestivaluriByUser(@PathVariable Integer userId) {
+        List<Festival> festivaluri = participareService.getFestivaluriByUser(userId);
+        return ResponseEntity.ok(festivaluri);
     }
 
     @PostMapping("/adauga")
