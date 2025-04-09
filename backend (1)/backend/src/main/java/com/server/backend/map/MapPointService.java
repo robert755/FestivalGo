@@ -32,4 +32,18 @@ public class MapPointService {
     public List<MapPoint> getPointsByFestival(Integer festivalId) {
         return mapPointRepository.findByFestivalId(festivalId);
     }
+    @Transactional
+    public void updatePointsForFestival(Integer festivalId, List<MapPoint> newPoints) {
+        // Stergem toate punctele existente pentru acel festival
+        mapPointRepository.deleteAllByFestivalId(festivalId);
+
+        // Asignăm festivalul pentru fiecare punct și le salvăm
+        Festival festival = festivalRepository.findById(festivalId)
+                .orElseThrow(() -> new RuntimeException("Festivalul nu există"));
+
+        for (MapPoint point : newPoints) {
+            point.setFestival(festival); // ⚠️ legătura e obligatorie
+            mapPointRepository.save(point);
+        }
+    }
 }

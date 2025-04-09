@@ -1,31 +1,34 @@
 <template>
   <div class="festival-list">
-    <h1 class="text-3xl font-bold mb-6">Festivaluri disponibile</h1>
+    <h1 class="titlu">Festivaluri disponibile</h1>
 
     <!-- 🔍 Search bar -->
     <input
       v-model="searchQuery"
       placeholder="Caută festival..."
-      class="input mb-4"
+      class="input"
     />
 
     <!-- 📅 Date filter -->
-    <div class="mb-4">
-      <label>Perioada: </label>
-      <input type="date" v-model="startDate" class="input mr-2" />
+    <div class="date-filter">
+      <label>Perioada:</label>
+      <input type="date" v-model="startDate" class="input" />
       <input type="date" v-model="endDate" class="input" />
     </div>
 
     <!-- 🧾 Lista festivaluri -->
-    <div class="festival-cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="festivaluri">
       <div
         v-for="festival in filteredFestivals"
         :key="festival.id"
-        class="festival-card border p-4 rounded shadow hover:shadow-lg cursor-pointer"
+        class="card"
         @click="goToFestival(festival.id)"
       >
-        <img :src="festival.imagePath" alt="Imagine" class="w-full h-48 object-cover rounded mb-2" />
-        <h2 class="text-xl font-semibold">{{ festival.name }}</h2>
+        <img :src="festival.imagePath" alt="Imagine" class="imagine" />
+        <div class="detalii">
+          <h2 class="titlu-festival">{{ festival.name }}</h2>
+          <p class="data">{{ festival.startDate }} – {{ festival.endDate }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +57,6 @@ onMounted(async () => {
 const filteredFestivals = computed(() => {
   return festivals.value.filter(festival => {
     const matchesSearch = festival.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-
     const festivalStart = new Date(festival.startDate)
     const festivalEnd = new Date(festival.endDate)
 
@@ -72,18 +74,69 @@ const goToFestival = (id) => {
 
 <style scoped>
 .festival-list {
-  max-width: 1000px;
-  margin: auto;
-  padding: 2rem;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+}
+.titlu {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
 }
 .input {
-  padding: 0.5rem;
+  padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   width: 100%;
   max-width: 300px;
+  margin: 0.5rem;
 }
-.festival-card:hover {
-  background-color: #f3f4f6;
+.date-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.festivaluri {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+.imagine {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+.detalii {
+  padding: 1rem;
+}
+.titlu-festival {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.data {
+  font-size: 14px;
+  color: #555;
+}
+.card:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease-in-out;
 }
 </style>

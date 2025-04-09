@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ParticipareRepository extends JpaRepository<Participare,Integer> {
-    @Query("SELECT p.festival FROM Participare p WHERE p.user.id = :userId AND p.status = com.server.backend.participare.Status.PARTICIPA")
-    List<Festival> findFestivaluriByUserId(@Param("userId") Integer userId);
+    @Query("SELECT p FROM Participare p WHERE p.user.id = :userId AND p.status = com.server.backend.participare.Status.PARTICIPA")
+    List<Participare> findParticipariByUserId(@Param("userId") Integer userId);
 
 }

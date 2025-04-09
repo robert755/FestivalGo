@@ -29,4 +29,10 @@ public class MapPointController {
     public ResponseEntity<List<MapPoint>> getPointsForFestival(@PathVariable Integer festivalId) {
         return ResponseEntity.ok(mapPointService.getPointsByFestival(festivalId));
     }
+    @PutMapping("/update/{festivalId}")
+    public ResponseEntity<?> updateMapPoints(@PathVariable Integer festivalId, @RequestBody List<MapPoint> newPoints) {
+        mapPointService.updatePointsForFestival(festivalId, newPoints);
+        return ResponseEntity.ok().build();
+    }
+
 }

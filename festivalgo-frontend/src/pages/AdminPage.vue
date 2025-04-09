@@ -5,6 +5,8 @@
         <ul>
           <li><router-link to="/admin/add-festival">➕ Adaugă festival</router-link></li>
           <li><router-link to="/admin/bookings">📅 Vizualizare programări</router-link></li>
+          <li><router-link to="/admin/festival/updatefestival">✏️ Actualizează un festival</router-link></li>
+
           <!-- poți adăuga mai multe rute pe viitor -->
         </ul>
       </aside>

@@ -8,6 +8,7 @@ import Add_Festival from '../pages/Add_Festival.vue'
 import FestivalMap from '../pages/FestivalMap.vue' // ⬅️ nou
 import FestivalDetails from '../pages/FestivalDetails.vue'
 import UserParticipations from '../pages/UserParticipations.vue'
+import UpdateFestival from '../pages/UpdateFestival.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -19,7 +20,8 @@ const routes = [
   {path: '/my-participations',component: UserParticipations,meta: { requiresAuth: true, role: 'USER' }},
   { path: '/admin', component: AdminPage, meta: { requiresAuth: true, role: 'ADMIN' } },
   { path: '/admin/add-festival', component: Add_Festival, meta: { requiresAuth: true, role: 'ADMIN' } },
-  { path: '/festival-map/:id', component: FestivalMap, props: true, meta: { requiresAuth: true, role: 'ADMIN' } } // ⬅️ adăugat
+  { path: '/festival-map/:id', component: FestivalMap, props: true, meta: { requiresAuth: true, role: 'ADMIN' } }, // ⬅️ adăugat
+  {path: '/admin/festival/updatefestival',component:UpdateFestival,props:true,meta: {requiresAuth:true,role:'ADMIN'}}
 ]
 
 const router = createRouter({

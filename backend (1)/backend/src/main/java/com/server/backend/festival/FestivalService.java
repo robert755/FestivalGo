@@ -42,12 +42,26 @@ public class FestivalService {
 
     @Transactional
     public Festival updateFestival(Integer id, Festival festivalDetails) {
-        if (festivalRepository.existsById(id)) {
-            festivalDetails.setId(id);  // Setăm id-ul pentru a face update
-            return festivalRepository.save(festivalDetails);
+        Optional<Festival> optionalFestival = festivalRepository.findById(id);
+
+        if (optionalFestival.isPresent()) {
+            Festival festival = optionalFestival.get();
+
+            // Actualizăm manual fiecare câmp
+            festival.setName(festivalDetails.getName());
+            festival.setDescription(festivalDetails.getDescription());
+            festival.setStartDate(festivalDetails.getStartDate());
+            festival.setEndDate(festivalDetails.getEndDate());
+            festival.setGenre(festivalDetails.getGenre());
+            festival.setImagePath(festivalDetails.getImagePath());
+            festival.setLocation(festivalDetails.getLocation());
+
+            return festivalRepository.save(festival);
         }
-        return null; // Poți arunca o excepție în loc, dacă dorești
+
+        return null;
     }
+
 
     @Transactional
     public void deleteFestival(Integer id) {

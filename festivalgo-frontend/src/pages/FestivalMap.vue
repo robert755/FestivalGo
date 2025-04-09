@@ -65,7 +65,6 @@
     try {
       for (const point of mapPoints.value) {
         await axios.post(`http://localhost:8081/map-points/${festivalId}`, {
-          festivalId: Number(festivalId),
           latitude: point.lat,
           longitude: point.lng,
           emoji: point.emoji,

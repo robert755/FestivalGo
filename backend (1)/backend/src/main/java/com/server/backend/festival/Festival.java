@@ -1,8 +1,10 @@
 package com.server.backend.festival;
 
+import com.server.backend.map.MapPoint;
 import com.server.backend.participare.Participare;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -102,6 +104,11 @@ public class Festival {
         this.imagePath = imagePath;
     }
 
-    @OneToMany(mappedBy = "festival")
-    private List<Participare> participari;
+    @OneToMany(mappedBy = "festival", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participare> participari = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "festival", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MapPoint> mapPoints;
+
 }
