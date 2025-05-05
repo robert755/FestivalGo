@@ -43,7 +43,7 @@ const userId = localStorage.getItem('userId')
 onMounted(() => {
   username.value = localStorage.getItem('username') || 'Utilizator'
 
-  fetch(`/users/${userId}`)
+  fetch(`http://localhost:8081/users/${userId}`)
     .then((res) => res.json())
     .then((data) => {
       preferredGenre.value = data.preferredGenre

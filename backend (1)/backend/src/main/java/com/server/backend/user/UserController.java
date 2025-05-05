@@ -1,6 +1,7 @@
 package com.server.backend.user;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,10 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private LoginRateLimiterService rateLimiterService;
+
+
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
         // Criptăm parola înainte de a salva utilizatorul în baza de date
@@ -33,7 +38,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest servletRequest) {
+        String clientIp = servletRequest.getRemoteAddr(); // sau request.getUsername() dacă vrei per utilizator
+
+        if (!rateLimiterService.isAllowed(clientIp)) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                    .body("Prea multe încercări. Încearcă din nou peste un minut.");
+        }
         User user = userService.findByUsername(request.getUsername());
 
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {

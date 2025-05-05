@@ -44,11 +44,23 @@ const festivals = ref([])
 const searchQuery = ref('')
 const startDate = ref('')
 const endDate = ref('')
+const userId = localStorage.getItem('userId')
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:8081/festivals')
-    festivals.value = res.data
+    // 1. Ia utilizatorul și genul preferat
+    const userRes = await axios.get(`http://localhost:8081/users/${userId}`)
+    const preferredGenre = userRes.data.preferredGenre
+
+    // 2. Ia toate festivalurile
+    const festRes = await axios.get('http://localhost:8081/festivals')
+    const allFestivals = festRes.data
+
+    // 3. Sortează: întâi cele potrivite cu preferința
+    festivals.value = [
+      ...allFestivals.filter(f => f.genre === preferredGenre),
+      ...allFestivals.filter(f => f.genre !== preferredGenre)
+    ]
   } catch (err) {
     console.error('Eroare la încărcarea festivalurilor:', err)
   }

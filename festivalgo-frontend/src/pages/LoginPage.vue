@@ -63,7 +63,13 @@ const login = async () => {
       router.push('/welcome')
     }
   } catch (err) {
-    error.value = 'Autentificare eșuată. Verifică datele!'
+    if (err.response && err.response.status === 429) {
+      error.value = 'Prea multe încercări! Încearcă din nou peste un minut.'
+    } else if (err.response && err.response.status === 401) {
+      error.value = 'Autentificare eșuată. Verifică datele!'
+    } else {
+      error.value = 'Eroare de rețea sau server.'
+    }
     console.error(err)
   }
 }
