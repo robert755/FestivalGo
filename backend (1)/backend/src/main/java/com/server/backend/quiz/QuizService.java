@@ -25,19 +25,8 @@ public class QuizService {
         return questionRepository.save(question);
     }
 
-    @Transactional
-    public Answer createAnswer(Answer answer) {
-        return answerRepository.save(answer);
-    }
-
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-    public List<Answer> getAnswersForQuestion(Integer questionId) {
-        return answerRepository.findAll()
-                .stream()
-                .filter(a -> a.getQuestion().getId().equals(questionId))
-                .toList();
-    }
 }

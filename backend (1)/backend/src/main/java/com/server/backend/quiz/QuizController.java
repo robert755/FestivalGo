@@ -19,18 +19,10 @@ public class QuizController {
         return quizService.createQuestion(question);
     }
 
-    @PostMapping("/answers")
-    public Answer addAnswer(@RequestBody Answer answer) {
-        return quizService.createAnswer(answer);
-    }
 
     @GetMapping("/questions")
     public List<Question> getAllQuestions() {
         return quizService.getAllQuestions();
     }
 
-    @GetMapping("/questions/{id}/answers")
-    public List<Answer> getAnswers(@PathVariable Integer id) {
-        return quizService.getAnswersForQuestion(id);
-    }
 }

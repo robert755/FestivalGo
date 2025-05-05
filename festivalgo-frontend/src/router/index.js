@@ -9,6 +9,8 @@ import FestivalMap from '../pages/FestivalMap.vue' // ⬅️ nou
 import FestivalDetails from '../pages/FestivalDetails.vue'
 import UserParticipations from '../pages/UserParticipations.vue'
 import UpdateFestival from '../pages/UpdateFestival.vue'
+import QuestionAdmin from '../pages/QuestionAdmin.vue'
+import QuizPage from '../pages/QuizPage.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -21,7 +23,9 @@ const routes = [
   { path: '/admin', component: AdminPage, meta: { requiresAuth: true, role: 'ADMIN' } },
   { path: '/admin/add-festival', component: Add_Festival, meta: { requiresAuth: true, role: 'ADMIN' } },
   { path: '/festival-map/:id', component: FestivalMap, props: true, meta: { requiresAuth: true, role: 'ADMIN' } }, // ⬅️ adăugat
-  {path: '/admin/festival/updatefestival',component:UpdateFestival,props:true,meta: {requiresAuth:true,role:'ADMIN'}}
+  {path: '/admin/festival/updatefestival',component:UpdateFestival,props:true,meta: {requiresAuth:true,role:'ADMIN'}},
+  {path:'/admin/questionmanager',component:QuestionAdmin,props:true,meta:{requiresAuth:true,role:'ADMIN'}},
+  {path:'/user/quiz-page',component:QuizPage,props:true,meta:{requiresAuth:true,role:"USER"}}
 ]
 
 const router = createRouter({

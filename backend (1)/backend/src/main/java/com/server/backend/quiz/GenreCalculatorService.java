@@ -14,20 +14,28 @@ public class GenreCalculatorService {
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
 
+    // ✅ Mapare cuvânt cheie → gen muzical
+    private final Map<Genre, List<String>> keywordMap = Map.of(
+            Genre.ROCK, List.of("rock"),
+            Genre.EDM, List.of("electronică", "edm", "techno", "trance"),
+            Genre.POP, List.of("pop", "radio", "mainstream"),
+            Genre.URBAN, List.of("hip-hop", "rap", "urban"),
+            Genre.FOLK, List.of("folk", "chitară", "acustic", "tradițional")
+    );
+
     public GenreCalculatorService(AnswerRepository answerRepository, UserRepository userRepository) {
         this.answerRepository = answerRepository;
         this.userRepository = userRepository;
     }
 
-    // Acum primim și userId
     public Genre calculateAndSaveGenre(Integer userId, List<UserAnswerDTO> userAnswers) {
-        // Inițializăm scorul pentru fiecare gen
+        // 1️⃣ Inițializăm scorurile
         Map<Genre, Integer> genreScores = new HashMap<>();
         for (Genre genre : Genre.values()) {
             genreScores.put(genre, 0);
         }
 
-        // Parcurgem fiecare răspuns trimis de utilizator
+        // 2️⃣ Procesăm fiecare răspuns
         for (UserAnswerDTO dto : userAnswers) {
             Optional<Answer> optionalAnswer = answerRepository.findById(dto.getAnswerId());
             if (optionalAnswer.isEmpty()) continue;
@@ -42,30 +50,33 @@ public class GenreCalculatorService {
             }
         }
 
-        // Calculăm genul cu cel mai mare scor
+        // 3️⃣ Alegem genul cu cel mai mare scor
         Genre calculatedGenre = genreScores.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
-        // Salvăm genul în User
+        // 4️⃣ Salvăm genul în profilul utilizatorului
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setPreferredGenre(calculatedGenre); // salvăm genul
-            userRepository.save(user);               // persistăm în DB
+            user.setPreferredGenre(calculatedGenre);
+            userRepository.save(user);
         }
 
         return calculatedGenre;
     }
 
-    // Maparea întrebărilor la genuri
+    // 🔍 Funcție îmbunătățită: caută cuvinte cheie din întrebări
     private Genre mapQuestionToGenre(String questionText) {
-        if (questionText.contains("rock")) return Genre.ROCK;
-        if (questionText.contains("electronică") || questionText.contains("edm")) return Genre.EDM;
-        if (questionText.contains("pop") || questionText.contains("radio")) return Genre.POP;
-        if (questionText.contains("hip-hop") || questionText.contains("urban")) return Genre.URBAN;
-        if (questionText.contains("folk") || questionText.contains("chitară")) return Genre.FOLK;
+        String lowerText = questionText.toLowerCase();
+        for (Map.Entry<Genre, List<String>> entry : keywordMap.entrySet()) {
+            for (String keyword : entry.getValue()) {
+                if (lowerText.contains(keyword)) {
+                    return entry.getKey();
+                }
+            }
+        }
         return null;
     }
 }

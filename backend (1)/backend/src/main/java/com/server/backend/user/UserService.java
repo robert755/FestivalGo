@@ -31,10 +31,6 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -44,5 +40,10 @@ public class UserService {
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
+
+    public User findById(Integer id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
 
 }
