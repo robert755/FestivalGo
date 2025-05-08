@@ -1,35 +1,33 @@
 <template>
-  <div class="login-page">
-    <h2 class="text-xl font-bold mb-4">Autentificare</h2>
+  <div class="login-page" :style="{ backgroundImage: `url(${backgroundImage})` }">
+    <form @submit.prevent="login" class="login-form">
+      <h2 class="form-title">Autentificare</h2>
 
-    <form @submit.prevent="login">
       <input
         v-model="username"
         type="text"
         placeholder="Username"
         required
-        class="input"
+        class="form-input"
       />
       <input
         v-model="password"
         type="password"
         placeholder="Parolă"
         required
-        class="input"
+        class="form-input"
       />
-      <button type="submit" class="btn">Autentificare</button>
+      <button type="submit" class="form-button">Autentificare</button>
+
+      <p class="mt-3 text-sm text-center">
+        Nu ai cont?
+        <router-link to="/register" class="text-blue-600 underline hover:text-blue-800">
+          Înregistrează-te aici
+        </router-link>
+      </p>
+
+      <p v-if="error" class="error-message">{{ error }}</p>
     </form>
-
-    <!-- 🔹 Link către înregistrare -->
-    <p class="mt-3 text-sm">
-      Nu ai cont?
-      <router-link to="/register" class="text-blue-600 underline hover:text-blue-800">
-        Înregistrează-te aici
-      </router-link>
-    </p>
-
-    <!-- 🔺 Mesaj de eroare -->
-    <p v-if="error" class="text-red-600 mt-4">{{ error }}</p>
   </div>
 </template>
 
@@ -37,6 +35,9 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+
+// 🔽 Import corect al imaginii folosind cale relativă
+import backgroundImage from '../assets/image/backgrund.png'
 
 const router = useRouter()
 
@@ -51,13 +52,11 @@ const login = async () => {
       password: password.value
     })
 
-    // ✅ Salvăm în localStorage
     localStorage.setItem('userId', res.data.id)
     localStorage.setItem('username', res.data.username)
     localStorage.setItem('role', res.data.role)
 
-      // 🔁 Redirecționare în funcție de rol
-      if (res.data.role === 'ADMIN') {
+    if (res.data.role === 'ADMIN') {
       router.push('/admin')
     } else if (res.data.role === 'USER') {
       router.push('/welcome')
@@ -77,22 +76,75 @@ const login = async () => {
 
 <style scoped>
 .login-page {
-  max-width: 400px;
-  margin: auto;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
+  overflow: hidden;
 }
-.input {
+
+.login-form {
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-input {
   width: 100%;
   margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.btn {
-  background-color: #2563eb;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.25);
   color: white;
-  padding: 0.5rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-input::placeholder {
+  color: #e0e0e0;
+}
+.form-input:focus {
+  outline: none;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.form-button {
+  width: 100%;
+  background-color: #6366f1;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
   border: none;
-  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+.form-button:hover {
+  background-color: #4f46e5;
+}
+
+.error-message {
+  color: #f87171;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
 }
 </style>

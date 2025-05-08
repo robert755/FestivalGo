@@ -1,4 +1,3 @@
-// ✅ AddFestival.vue
 <template>
   <div class="add-festival">
     <h2 class="text-2xl font-bold mb-4">Adaugă Festival</h2>
@@ -8,14 +7,17 @@
       <input v-model="startDate" type="date" class="input" required />
       <input v-model="endDate" type="date" class="input" required />
       <input v-model="description" placeholder="Descriere" class="input" required />
-      <input v-model="imagePath" placeholder="Link imagine" class="input" required />
+
+      <!-- Input pentru fișier (imagine) -->
+      <input type="file" @change="handleImageUpload" class="input" accept="image/*" required />
 
       <label for="genre">Gen muzical:</label>
       <select v-model="genre" class="input">
         <option value="ROCK">Rock</option>
         <option value="EDM">EDM</option>
-        <option value="RAP">Rap</option>
+        <option value="URBAN">Urban</option>
         <option value="POP">Pop</option>
+        <option value="FOLK">Folk</option>
       </select>
 
       <button type="submit" class="btn">Creează festival</button>
@@ -34,20 +36,31 @@ const location = ref('')
 const startDate = ref('')
 const endDate = ref('')
 const description = ref('')
-const imagePath = ref('')
 const genre = ref('ROCK')
+const imageFile = ref(null)
+
+// Preluarea fișierului selectat din input
+const handleImageUpload = (event) => {
+  imageFile.value = event.target.files[0]
+}
 
 const submitFestival = async () => {
   try {
-    const res = await axios.post('http://localhost:8081/festivals/post', {
-      name: name.value,
-      location: location.value,
-      startDate: startDate.value,
-      endDate: endDate.value,
-      description: description.value,
-      imagePath: imagePath.value,
-      genre: genre.value
+    const formData = new FormData()
+    formData.append('name', name.value)
+    formData.append('location', location.value)
+    formData.append('startDate', startDate.value)
+    formData.append('endDate', endDate.value)
+    formData.append('description', description.value)
+    formData.append('genre', genre.value)
+    formData.append('image', imageFile.value)
+
+    const res = await axios.post('http://localhost:8081/festivals/post', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     })
+
     const festivalId = res.data.id
     alert('Festival creat! Acum adaugă harta.')
     router.push(`/festival-map/${festivalId}`)
@@ -78,5 +91,6 @@ const submitFestival = async () => {
   color: white;
   border: none;
   border-radius: 6px;
+  cursor: pointer;
 }
 </style>

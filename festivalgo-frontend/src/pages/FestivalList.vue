@@ -24,7 +24,7 @@
         class="card"
         @click="goToFestival(festival.id)"
       >
-        <img :src="festival.imagePath" alt="Imagine" class="imagine" />
+      <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine" class="imagine" />
         <div class="detalii">
           <h2 class="titlu-festival">{{ festival.name }}</h2>
           <p class="data">{{ festival.startDate }} – {{ festival.endDate }}</p>
@@ -124,7 +124,7 @@ const goToFestival = (id) => {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   cursor: pointer;
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   height: 400px;
   margin: auto;
   display: flex;
@@ -134,7 +134,12 @@ const goToFestival = (id) => {
   width: 100%;
   height: 250px;
   object-fit: cover;
+  object-position: left bottom; /* 🟢 AICI e cheia: focus pe stânga jos */
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+
+
 .detalii {
   padding: 1rem;
 }

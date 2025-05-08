@@ -30,7 +30,7 @@ public class Festival {
     }
 
     // Constructor cu parametri
-    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate,Genre genre,String ImagePath) {
+    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate,Genre genre,String imagePath) {
         this.name = name;
         this.location = location;
         this.description = description;

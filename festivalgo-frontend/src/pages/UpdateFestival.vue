@@ -41,17 +41,17 @@
           <option disabled value="">Alege genul</option>
           <option>ROCK</option>
           <option>EDM</option>
-          <option>Hip-Hop</option>
+          <option>URBAN</option>
           <option>POP</option>
-          <option>Jazz</option>
+          <option>FOLK</option>
         </select>
 
-        <label>Link imagine:</label>
-        <input v-model="festival.imagePath" />
+        <label>Imagine nouă (opțional):</label>
+        <input type="file" @change="handleImageUpload" accept="image/*" />
 
         <div v-if="festival.imagePath" style="margin-top: 10px">
           <p><strong>Previzualizare:</strong></p>
-          <img :src="festival.imagePath" alt="Imagine festival" width="200" />
+          <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine festival" width="200" />
         </div>
 
         <br />
@@ -98,6 +98,7 @@ export default {
         genre: '',
         imagePath: ''
       },
+      imageFile: null,
       map: null,
       selectedEmoji: '🎤',
       puncte: []
@@ -107,6 +108,9 @@ export default {
     this.incarcaFestivaluri()
   },
   methods: {
+    handleImageUpload(event) {
+      this.imageFile = event.target.files[0]
+    },
     incarcaFestivaluri() {
       axios.get('http://localhost:8081/festivals')
         .then(r => this.festivaluri = r.data)
@@ -114,6 +118,7 @@ export default {
     },
     selecteazaFestival(fest) {
       this.festival = { ...fest }
+      this.imageFile = null
       nextTick(() => {
         this.incarcaHarta()
       })
@@ -127,7 +132,6 @@ export default {
         attribution: '© OpenStreetMap'
       }).addTo(this.map)
 
-      // adăugare puncte pe click
       this.map.on('click', e => {
         const { lat, lng } = e.latlng
         const emoji = this.selectedEmoji
@@ -154,9 +158,25 @@ export default {
       }
     },
     salveazaFestivalul() {
-      axios.put(`http://localhost:8081/festivals/${this.festival.id}`, this.festival)
+      const formData = new FormData()
+      formData.append('name', this.festival.name)
+      formData.append('location', this.festival.location)
+      formData.append('description', this.festival.description)
+      formData.append('startDate', this.festival.startDate)
+      formData.append('endDate', this.festival.endDate)
+      formData.append('genre', this.festival.genre)
+      if (this.imageFile) {
+        formData.append('image', this.imageFile)
+      }
+
+      axios.put(`http://localhost:8081/festivals/${this.festival.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
         .then(() => alert('✅ Festival actualizat'))
-        .catch(e => console.log('Eroare la salvare:', e))
+        .catch(e => {
+          console.log('Eroare la salvare:', e)
+          alert('Eroare la actualizare festival!')
+        })
     },
     stergeFestivalul() {
       if (!confirm(`Sigur vrei să ștergi "${this.festival.name}"?`)) return

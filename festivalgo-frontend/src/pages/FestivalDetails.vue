@@ -1,7 +1,7 @@
 <template>
     <div class="festival-detail-page">
       <h2 class="text-2xl font-bold mb-4">{{ festival.name }}</h2>
-      <img :src="festival.imagePath" alt="Imagine festival" class="w-full max-h-96 object-cover mb-4 rounded" />
+      <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine" class="w-full max-h-96 object-cover mb-4 rounded" />
       <p class="mb-2"><strong>Locație:</strong> {{ festival.location }}</p>
       <p class="mb-2"><strong>Perioadă:</strong> {{ festival.startDate }} - {{ festival.endDate }}</p>
       <p class="mb-4"><strong>Descriere:</strong> {{ festival.description }}</p>

@@ -2,9 +2,15 @@ package com.server.backend.festival;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class FestivalService {
@@ -28,6 +34,14 @@ public class FestivalService {
         // Salvează obiectul 'newFestival' în baza de date
         return festivalRepository.save(newFestival);
     }
+    public String saveImage(MultipartFile imageFile) throws IOException {
+        String folder = "uploads/";
+        String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+        Path imagePath = Paths.get(folder + fileName);
+        Files.createDirectories(imagePath.getParent());
+        Files.write(imagePath, imageFile.getBytes());
+        return fileName;
+    }
 
     @Transactional
     public List<Festival> getAllFestivals() {
@@ -47,14 +61,17 @@ public class FestivalService {
         if (optionalFestival.isPresent()) {
             Festival festival = optionalFestival.get();
 
-            // Actualizăm manual fiecare câmp
             festival.setName(festivalDetails.getName());
             festival.setDescription(festivalDetails.getDescription());
             festival.setStartDate(festivalDetails.getStartDate());
             festival.setEndDate(festivalDetails.getEndDate());
             festival.setGenre(festivalDetails.getGenre());
-            festival.setImagePath(festivalDetails.getImagePath());
             festival.setLocation(festivalDetails.getLocation());
+
+            // ✅ doar dacă ai primit o imagine nouă
+            if (festivalDetails.getImagePath() != null) {
+                festival.setImagePath(festivalDetails.getImagePath());
+            }
 
             return festivalRepository.save(festival);
         }

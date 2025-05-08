@@ -11,7 +11,7 @@
         class="box"
         v-for="p in participari"
         :key="p.id"
-        :style="{ backgroundImage: p.festival ? `url(${p.festival.imagePath})` : 'none' }"
+        :style="{ backgroundImage: p.festival ? `url(http://localhost:8081/uploads/${p.festival.imagePath})` : 'none' }"
       >
         <div class="info-box">
           <div class="text-stanga">
@@ -84,13 +84,16 @@ const anuleazaParticipare = async (id) => {
 /* CARD */
 .box {
   position: relative;
+  width: 300px; /* sau cât vrei */
   height: 180px;
-  border-radius: 12px;
   background-size: cover;
-  background-position: center;
+  background-position: left bottom; /* focus pe stânga-jos */
+  background-repeat: no-repeat;
+  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
+
 
 /* Overlay info */
 .info-box {
