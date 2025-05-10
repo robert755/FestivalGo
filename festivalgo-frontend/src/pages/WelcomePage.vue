@@ -8,11 +8,12 @@
       <h2>FestivalGo</h2>
       <button @click="toggleSidebar">Închide</button>
       <nav>
-        <button @click="goTo('/festivals')">🎤 Festivaluri</button>
-        <button @click="goTo('/my-participations')">🗓 Participările mele</button>
-        <button class="logout" @click="logout">⛔ Logout</button>
+        <button @click="goTo('/festivals')">Festivaluri</button>
+        <button @click="goTo('/my-participations')"> Participările mele</button>
+        <button @click="goTo('/chat')"> VibeTalk</button>
+        <button class="logout" @click="logout">Logout</button>
         <div v-if="!preferredGenre" class="quiz-link" @click="goTo('/user/quiz-page')">
-          ❓ Nu știi ce ți se potrivește? Fă testul!
+           Nu știi ce ți se potrivește? Fă testul!
         </div>
       </nav>
     </aside>
@@ -21,10 +22,10 @@
     <main>
       <button class="menu-toggle" @click="toggleSidebar">☰</button>
       <h1>Salut, {{ username }}!</h1>
-      <p class="slogan">🎪 Vibe. Muzică. Haos organizat. Tu alegi cum trăiești festivalul! 🎉</p>
+      <p class="slogan">Vibe. Muzică. Haos organizat. Tu alegi cum trăiești festivalul!</p>
 
       <section v-if="festivalulLunii">
-        <h2>🌟 Festivalul lunii</h2>
+        <h2> Festivalul lunii</h2>
         <div class="card highlight" @click="goTo(`/festival/${festivalulLunii.id}`)">
           <img :src="`http://localhost:8081/uploads/${festivalulLunii.imagePath}`" alt="Festival imagine" />
           <div class="card-text">

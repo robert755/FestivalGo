@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +20,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -77,5 +82,17 @@ public class UserController {
         response.put("preferredGenre", user.getPreferredGenre());
         return ResponseEntity.ok(response);
     }
+    @GetMapping
+    public List<User> getAllUsers() {
+        List<User> totiUserii = userRepository.findAll();
+        List<User> doarUseri = new ArrayList<>();
+        for (User user : totiUserii) {
+            if (user.getRole() == Role.USER) {
+                doarUseri.add(user);
+            }
+        }
+        return doarUseri;
+    }
+
 }
 
