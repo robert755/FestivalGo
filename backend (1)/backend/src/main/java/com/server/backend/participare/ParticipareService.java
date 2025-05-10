@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,8 +29,30 @@ public class ParticipareService {
     }
 
     public List<Participare> getParticipariByUser(Integer userId) {
-        return participareRepository.findParticipariByUserId(userId);
+        // 1. Luăm toate participările active (status = PARTICIPA) pentru utilizatorul dat
+        List<Participare> toateParticiparile = participareRepository.findParticipariByUserId(userId);
+
+        // 2. Creăm o listă nouă unde vom pune doar cele valabile (endDate > azi)
+        List<Participare> doarViitoare = new ArrayList<>();
+
+        // 3. Luăm data curentă (azi, fără ora)
+        LocalDate azi = LocalDate.now();
+
+        // 4. Verificăm fiecare participare
+        for (Participare p : toateParticiparile) {
+            // Luăm data de sfârșit a festivalului
+            LocalDate dataSfarsit = p.getFestival().getEndDate();
+
+            // Dacă festivalul se termină după azi, îl adăugăm în listă
+            if (dataSfarsit.isAfter(azi)) {
+                doarViitoare.add(p);
+            }
+        }
+
+        // 5. Returnăm doar festivalurile viitoare
+        return doarViitoare;
     }
+
 
     @Transactional
     public Participare adaugaParticipare(Integer userId, Integer festivalId) {
@@ -38,6 +62,11 @@ public class ParticipareService {
         Festival festival = festivalRepository.findById(festivalId)
                 .orElseThrow(() -> new RuntimeException("Festivalul nu a fost găsit"));
 
+        // Verifică dacă deja există o participare activă (PARTICIPA)
+        boolean existaDeja = participareRepository.existsByUserIdAndFestivalIdAndStatus(userId, festivalId, Status.PARTICIPA);
+        if (existaDeja) {
+            throw new RuntimeException("Ești deja înscris la acest festival.");
+        }
         Participare participare = new Participare();
         participare.setUser(user);
         participare.setFestival(festival);

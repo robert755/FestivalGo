@@ -6,23 +6,24 @@
       Nu ești înscris la niciun festival momentan.
     </div>
 
-    <div v-else class="festivaluri-boxuri">
+    <div class="card-container">
       <div
-        class="box"
+        class="card"
         v-for="p in participari"
         :key="p.id"
-        :style="{ backgroundImage: p.festival ? `url(http://localhost:8081/uploads/${p.festival.imagePath})` : 'none' }"
       >
-        <div class="info-box">
-          <div class="text-stanga">
-            <h2 class="nume">{{ p.festival?.name || 'Festival șters' }}</h2>
-            <p class="perioada">
-              {{ p.festival?.startDate || '' }} - {{ p.festival?.endDate || '' }}
-            </p>
-          </div>
-          <button class="btn-anuleaza" @click="anuleazaParticipare(p.id)">
-            Te-ai răzgândit?
-          </button>
+        <!-- Imagine stânga -->
+        <img
+          :src="`http://localhost:8081/uploads/${p.festival.imagePath}`"
+          alt="Festival"
+          class="card-img"
+        />
+
+        <!-- Informații dreapta -->
+        <div class="card-info">
+          <h2>{{ p.festival?.name || 'Festival șters' }}</h2>
+          <p>{{ p.festival?.startDate }} – {{ p.festival?.endDate }}</p>
+          <button @click="anuleazaParticipare(p.id)">Te-ai răzgândit?</button>
         </div>
       </div>
     </div>
@@ -62,79 +63,93 @@ const anuleazaParticipare = async (id) => {
 <style scoped>
 .participari-container {
   padding: 2rem;
-  max-width: 1000px;
-  margin: auto;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0d0d0d, #1f0037);
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
 }
+
 .titlu {
-  font-size: 26px;
+  font-size: 36px;
   font-weight: bold;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #bb86fc;
+  text-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
 }
+
 .info {
   font-size: 16px;
-  color: gray;
-  margin-top: 2rem;
+  color: #888;
+  text-align: center;
+  margin-top: 3rem;
+  font-style: italic;
 }
-.festivaluri-boxuri {
+
+.card-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
-/* CARD */
-.box {
-  position: relative;
-  width: 300px; /* sau cât vrei */
-  height: 180px;
-  background-size: cover;
-  background-position: left bottom; /* focus pe stânga-jos */
-  background-repeat: no-repeat;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-
-/* Overlay info */
-.info-box {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+/* Card stil HBO Max */
+.card {
   display: flex;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 16px rgba(187, 134, 252, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 24px rgba(187, 134, 252, 0.25);
+}
+
+.card-img {
+  width: 40%;
+  height: 200px;
+  object-fit: cover;
+  filter: brightness(0.9);
+}
+
+.card-info {
+  flex: 1;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: flex-end;
-  padding: 1rem;
-  box-sizing: border-box;
-  height: 100%;
-  color: white;
+  background-color: transparent;
 }
 
-/* Text colț stânga jos */
-.text-stanga {
-  max-width: 70%;
+.card-info h2 {
+  font-size: 22px;
+  color: #ffffff;
+  margin-bottom: 10px;
 }
-.nume {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-.perioada {
+
+.card-info p {
   font-size: 14px;
+  color: #cccccc;
 }
 
-/* Buton colț dreapta jos */
-.btn-anuleaza {
-  background-color: rgba(239, 68, 68, 0.9);
+.card-info button {
+  margin-top: 1rem;
+  background-color: #ef4444;
   border: none;
   color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
 }
-.btn-anuleaza:hover {
-  background-color: rgba(220, 38, 38, 0.95);
+
+.card-info button:hover {
+  background-color: #dc2626;
 }
 </style>
+

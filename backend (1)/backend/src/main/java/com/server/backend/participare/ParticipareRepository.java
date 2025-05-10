@@ -13,5 +13,6 @@ import java.util.List;
 public interface ParticipareRepository extends JpaRepository<Participare,Integer> {
     @Query("SELECT p FROM Participare p WHERE p.user.id = :userId AND p.status = com.server.backend.participare.Status.PARTICIPA")
     List<Participare> findParticipariByUserId(@Param("userId") Integer userId);
+    boolean existsByUserIdAndFestivalIdAndStatus(Integer userId, Integer festivalId, Status status);
 
 }

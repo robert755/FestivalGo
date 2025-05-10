@@ -1,35 +1,42 @@
 <template>
-  <div class="festival-list">
-    <h1 class="titlu">Festivaluri disponibile</h1>
+  <div class="festival-page">
+    <h1 class="title">🎶 Festival Explorer</h1>
 
-    <!-- 🔍 Search bar -->
+    <!-- 🔍 Căutare -->
     <input
       v-model="searchQuery"
       placeholder="Caută festival..."
-      class="input"
+      class="search"
     />
 
-    <!-- 📅 Date filter -->
+    <!-- 📅 Filtrare după perioadă -->
     <div class="date-filter">
-      <label>Perioada:</label>
-      <input type="date" v-model="startDate" class="input" />
-      <input type="date" v-model="endDate" class="input" />
+      <input type="date" v-model="startDate" class="date-input" />
+      <input type="date" v-model="endDate" class="date-input" />
     </div>
 
-    <!-- 🧾 Lista festivaluri -->
-    <div class="festivaluri">
-      <div
-        v-for="festival in filteredFestivals"
-        :key="festival.id"
-        class="card"
-        @click="goToFestival(festival.id)"
-      >
-      <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine" class="imagine" />
-        <div class="detalii">
-          <h2 class="titlu-festival">{{ festival.name }}</h2>
-          <p class="data">{{ festival.startDate }} – {{ festival.endDate }}</p>
+    <!-- 🎧 Secțiuni pe vibe-uri -->
+    <div v-for="vibe in vibes" :key="vibe" class="vibe-section">
+      <h2 class="vibe-title">{{ vibeLabels[vibe] }}</h2>
+      <div v-if="festivalsByVibe[vibe].length > 0" class="festival-row">
+        <div
+          v-for="festival in festivalsByVibe[vibe]"
+          :key="festival.id"
+          class="tile"
+          @click="goToFestival(festival.id)"
+        >
+          <img
+            :src="`http://localhost:8081/uploads/${festival.imagePath}`"
+            class="tile-img"
+            alt="Festival"
+          />
+          <div class="tile-info">
+            <h3>{{ festival.name }}</h3>
+            <p>{{ formatDate(festival.startDate) }} – {{ formatDate(festival.endDate) }}</p>
+          </div>
         </div>
       </div>
+      <p v-else class="no-results">Niciun festival în această perioadă.</p>
     </div>
   </div>
 </template>
@@ -46,114 +53,202 @@ const startDate = ref('')
 const endDate = ref('')
 const userId = localStorage.getItem('userId')
 
-onMounted(async () => {
-  try {
-    // 1. Ia utilizatorul și genul preferat
-    const userRes = await axios.get(`http://localhost:8081/users/${userId}`)
-    const preferredGenre = userRes.data.preferredGenre
+const vibes = ['relax', 'energetic', 'underground']
 
-    // 2. Ia toate festivalurile
-    const festRes = await axios.get('http://localhost:8081/festivals')
-    const allFestivals = festRes.data
+const vibeLabels = {
+  relax: '🌅 Relax & Sunset Vibes',
+  energetic: '⚡ Energetic & Party Vibes',
+  underground: '🎧 Underground & Indie'
+}
 
-    // 3. Sortează: întâi cele potrivite cu preferința
-    festivals.value = [
-      ...allFestivals.filter(f => f.genre === preferredGenre),
-      ...allFestivals.filter(f => f.genre !== preferredGenre)
-    ]
-  } catch (err) {
-    console.error('Eroare la încărcarea festivalurilor:', err)
-  }
-})
+const vibeMap = {
+  JAZZ: 'relax',
+  ROCK: 'energetic',
+  EDM: 'energetic',
+  Pop: 'energetic',
+  URBAN: 'underground'
+}
 
-const filteredFestivals = computed(() => {
-  return festivals.value.filter(festival => {
-    const matchesSearch = festival.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const festivalStart = new Date(festival.startDate)
-    const festivalEnd = new Date(festival.endDate)
-
-    const matchesDate = (!startDate.value || new Date(startDate.value) <= festivalEnd) &&
-                        (!endDate.value || new Date(endDate.value) >= festivalStart)
-
-    return matchesSearch && matchesDate
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('ro-RO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
   })
+}
+
+onMounted(async () => {
+  const resUser = await axios.get(`http://localhost:8081/users/${userId}`)
+  const preferredGenre = resUser.data.preferredGenre
+
+  const resF = await axios.get('http://localhost:8081/festivals')
+  const allFestivals = resF.data
+
+  festivals.value = [
+    ...allFestivals.filter(f => f.genre === preferredGenre),
+    ...allFestivals.filter(f => f.genre !== preferredGenre)
+  ]
 })
 
-const goToFestival = (id) => {
+const festivalsByVibe = computed(() => {
+  const grouped = {
+    relax: [],
+    energetic: [],
+    underground: []
+  }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0) // ca să comparăm doar data, fără ora
+
+  for (const fest of festivals.value) {
+    const festStart = new Date(fest.startDate)
+    const festEnd = new Date(fest.endDate)
+
+    const isInFuture = festEnd >= today
+
+    const matchesSearch = fest.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    const matchesDate =
+      isInFuture &&
+      (!startDate.value || new Date(startDate.value) <= festEnd) &&
+      (!endDate.value || new Date(endDate.value) >= festStart)
+
+    const vibe = vibeMap[fest.genre] || 'relax'
+
+    if (matchesSearch && matchesDate) {
+      grouped[vibe].push(fest)
+    }
+  }
+
+  return grouped
+})
+
+
+const goToFestival = id => {
   router.push(`/festival/${id}`)
 }
 </script>
 
 <style scoped>
-.festival-list {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 1rem;
-  text-align: center;
+.festival-page {
+  background: linear-gradient(to bottom, #0d0d0d, #1f0037);
+  min-height: 100vh;
+  padding: 2rem;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
 }
-.titlu {
-  font-size: 28px;
+
+.title {
+  font-size: 36px;
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #bb86fc;
+  text-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
 }
-.input {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+
+.search {
+  display: block;
+  margin: 0 auto 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background-color: #2c2c3c;
+  color: white;
+  max-width: 400px;
   width: 100%;
-  max-width: 300px;
-  margin: 0.5rem;
+  font-size: 15px;
+  box-shadow: 0 0 8px rgba(187, 134, 252, 0.1);
 }
+
 .date-filter {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
 }
-.festivaluri {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-.card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+
+.date-input {
+  padding: 0.7rem 1rem;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  cursor: pointer;
-  width: 100%;
-  max-width: 300px;
-  height: 400px;
-  margin: auto;
+  border: none;
+  background-color: #2c2c3c;
+  color: white;
+  font-size: 15px;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+}
+
+.vibe-section {
+  margin-bottom: 3rem;
+}
+
+.vibe-title {
+  font-size: 24px;
+  margin-bottom: 1rem;
+  color: #c084fc;
+  text-shadow: 0 0 6px #a855f7aa;
+}
+
+.festival-row {
   display: flex;
-  flex-direction: column;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
 }
-.imagine {
+
+.festival-row::-webkit-scrollbar {
+  height: 8px;
+}
+.festival-row::-webkit-scrollbar-thumb {
+  background: #7f5af055;
+  border-radius: 4px;
+}
+
+.tile {
+  min-width: 220px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 12px rgba(127, 90, 240, 0.2);
+  flex-shrink: 0;
+}
+
+.tile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(187, 134, 252, 0.4);
+}
+
+.tile-img {
   width: 100%;
-  height: 250px;
+  height: 140px;
   object-fit: cover;
-  object-position: left bottom; /* 🟢 AICI e cheia: focus pe stânga jos */
-  border-radius: 0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  filter: brightness(0.9);
 }
 
+.tile-info {
+  padding: 0.8rem;
+}
 
-.detalii {
-  padding: 1rem;
+.tile-info h3 {
+  font-size: 16px;
+  margin-bottom: 0.4rem;
+  color: #ffffff;
 }
-.titlu-festival {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+
+.tile-info p {
+  font-size: 13px;
+  color: #cccccc;
 }
-.data {
-  font-size: 14px;
-  color: #555;
-}
-.card:hover {
-  transform: scale(1.02);
-  transition: transform 0.2s ease-in-out;
+
+.no-results {
+  color: #888;
+  text-align: center;
+  font-style: italic;
+  margin-top: 1rem;
 }
 </style>

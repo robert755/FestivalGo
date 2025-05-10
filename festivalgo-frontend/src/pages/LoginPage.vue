@@ -37,7 +37,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 // 🔽 Import corect al imaginii folosind cale relativă
-import backgroundImage from '../assets/image/backgrund.png'
+import backgroundImage from '../assets/image/festivalgo-background.webp'
 
 const router = useRouter()
 
