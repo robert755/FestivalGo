@@ -20,7 +20,9 @@ public class GenreCalculatorService {
             Genre.EDM, List.of("electronică", "edm", "techno", "trance"),
             Genre.POP, List.of("pop", "radio", "mainstream"),
             Genre.URBAN, List.of("hip-hop", "rap", "urban"),
-            Genre.FOLK, List.of("folk", "chitară", "acustic", "tradițional")
+            Genre.FOLK, List.of("folk", "chitară", "acustic", "tradițional"),
+            Genre.JAZZ, List.of("jazz", "blues", "swing", "saxofon"),
+            Genre.INDIE, List.of("indie", "alternativ", "artistic", "independent")
     );
 
     public GenreCalculatorService(AnswerRepository answerRepository, UserRepository userRepository) {

@@ -1,27 +1,26 @@
 <template>
-  <div class="page-wrapper">
-    <div class="form-container">
+  <div class="register-page" :style="{ backgroundImage: `url(${backgroundImage})` }">
+    <form @submit.prevent="register" class="register-form">
       <h2 class="form-title">Înregistrare FestivalGo</h2>
 
-      <form @submit.prevent="register" class="form-fields">
-        <input v-model="form.username" type="text" placeholder="Username" required class="form-input" />
-        <input v-model="form.email" type="email" placeholder="Email" required class="form-input" />
-        <input v-model="form.password" type="password" placeholder="Parolă" required class="form-input" />
-        <input v-model="form.firstName" type="text" placeholder="Prenume" required class="form-input" />
-        <input v-model="form.lastName" type="text" placeholder="Nume" required class="form-input" />
+      <input v-model="form.username" type="text" placeholder="Username" required class="form-input" />
+      <input v-model="form.email" type="email" placeholder="Email" required class="form-input" />
+      <input v-model="form.password" type="password" placeholder="Parolă" required class="form-input" />
+      <input v-model="form.firstName" type="text" placeholder="Prenume" required class="form-input" />
+      <input v-model="form.lastName" type="text" placeholder="Nume" required class="form-input" />
 
-        <button type="submit" class="submit-button">Înregistrează-te</button>
-      </form>
+      <button type="submit" class="form-button">Înregistrează-te</button>
 
       <p v-if="success" class="success-message">Cont creat cu succes!</p>
       <p v-if="error" class="error-message">{{ error }}</p>
-    </div>
+    </form>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
+import backgroundImage from '../assets/image/festivalgo-background.webp'
 
 const form = ref({
   username: '',
@@ -36,7 +35,7 @@ const error = ref(null)
 
 const register = async () => {
   try {
-    const res = await axios.post('http://localhost:8081/users/register', form.value)
+    await axios.post('http://localhost:8081/users/register', form.value)
     success.value = true
     error.value = null
   } catch (err) {
@@ -48,19 +47,25 @@ const register = async () => {
 </script>
 
 <style scoped>
-.page-wrapper {
+.register-page {
   min-height: 100vh;
-  background-color: #f3f4f6;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
+  overflow: hidden;
 }
 
-.form-container {
-  background-color: white;
+.register-form {
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   width: 100%;
   max-width: 400px;
 }
@@ -68,34 +73,33 @@ const register = async () => {
 .form-title {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #ffffff;
   text-align: center;
-  color: #1f2937;
   margin-bottom: 1.5rem;
-}
-
-.form-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .form-input {
   width: 100%;
+  margin-bottom: 1rem;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.5rem;
-  background-color: #f9fafb;
   font-size: 1rem;
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-input::placeholder {
+  color: #e0e0e0;
 }
 .form-input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  background-color: white;
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+  background-color: rgba(255, 255, 255, 0.35);
 }
 
-.submit-button {
+.form-button {
   width: 100%;
   background-color: #6366f1;
   color: white;
@@ -105,7 +109,7 @@ const register = async () => {
   border: none;
   transition: background-color 0.3s ease;
 }
-.submit-button:hover {
+.form-button:hover {
   background-color: #4f46e5;
 }
 
@@ -117,7 +121,7 @@ const register = async () => {
 }
 
 .error-message {
-  color: #dc2626;
+  color: #f87171;
   margin-top: 1rem;
   text-align: center;
   font-weight: 500;

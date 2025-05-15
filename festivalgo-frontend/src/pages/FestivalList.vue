@@ -65,8 +65,10 @@ const vibeMap = {
   JAZZ: 'relax',
   ROCK: 'energetic',
   EDM: 'energetic',
-  Pop: 'energetic',
-  URBAN: 'underground'
+  POP: 'energetic',
+  URBAN: 'underground',
+  FOLK:'relax',
+  INDIE:'underground'
 }
 
 const formatDate = (dateString) => {

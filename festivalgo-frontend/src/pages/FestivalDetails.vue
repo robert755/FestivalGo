@@ -170,18 +170,23 @@ strong {
 .btn:hover {
   background-color: #dc2626;
 }
-
 .emoji-icon {
-  font-size: 24px;
+  font-size: 32px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .label {
   font-size: 12px;
-  color: black;
-  background: white;
-  border-radius: 4px;
-  padding: 2px;
-  margin-top: 2px;
+  color: white;
+  background-color: black !important;
+  padding: 4px 6px;
+  border-radius: 6px;
+  margin-top: 4px;
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
+  display: inline-block;
 }
+
 </style>

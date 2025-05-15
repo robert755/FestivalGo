@@ -19,9 +19,9 @@
       />
       <button type="submit" class="form-button">Autentificare</button>
 
-      <p class="mt-3 text-sm text-center">
+      <p class="form-register">
         Nu ai cont?
-        <router-link to="/register" class="text-blue-600 underline hover:text-blue-800">
+        <router-link to="/register" class="register-link">
           Înregistrează-te aici
         </router-link>
       </p>
@@ -36,11 +36,9 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-// 🔽 Import corect al imaginii folosind cale relativă
 import backgroundImage from '../assets/image/festivalgo-background.webp'
 
 const router = useRouter()
-
 const username = ref('')
 const password = ref('')
 const error = ref(null)
@@ -62,9 +60,9 @@ const login = async () => {
       router.push('/welcome')
     }
   } catch (err) {
-    if (err.response && err.response.status === 429) {
+    if (err.response?.status === 429) {
       error.value = 'Prea multe încercări! Încearcă din nou peste un minut.'
-    } else if (err.response && err.response.status === 401) {
+    } else if (err.response?.status === 401) {
       error.value = 'Autentificare eșuată. Verifică datele!'
     } else {
       error.value = 'Eroare de rețea sau server.'
@@ -139,6 +137,23 @@ const login = async () => {
 }
 .form-button:hover {
   background-color: #4f46e5;
+}
+
+.form-register {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #f3f3f3;
+}
+
+.register-link {
+  color: #c4b5fd;
+  text-decoration: underline;
+  margin-left: 0.3rem;
+  transition: color 0.2s ease;
+}
+.register-link:hover {
+  color: white;
 }
 
 .error-message {

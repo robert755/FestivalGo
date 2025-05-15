@@ -39,6 +39,7 @@ public class FestivalService {
         String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
         Path imagePath = Paths.get(folder + fileName);
         Files.createDirectories(imagePath.getParent());
+        System.out.println("Imagine salvată în: " + imagePath.toAbsolutePath()); // verificare
         Files.write(imagePath, imageFile.getBytes());
         return fileName;
     }

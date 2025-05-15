@@ -18,6 +18,8 @@
         <option value="URBAN">Urban</option>
         <option value="POP">Pop</option>
         <option value="FOLK">Folk</option>
+        <option value="JAZZ">Jazz</option>
+        <option value=" INDIE">Indie</option>
       </select>
 
       <button type="submit" class="btn">Creează festival</button>

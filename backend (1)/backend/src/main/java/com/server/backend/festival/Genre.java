@@ -5,5 +5,7 @@ public enum Genre {
     POP,
     ROCK,
     URBAN,
-    FOLK
+    FOLK,
+    INDIE,
+    JAZZ
 }

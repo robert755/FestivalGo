@@ -9,11 +9,12 @@
       <button @click="toggleSidebar">Închide</button>
       <nav>
         <button @click="goTo('/festivals')">Festivaluri</button>
-        <button @click="goTo('/my-participations')"> Participările mele</button>
-        <button @click="goTo('/chat')"> VibeTalk</button>
+        <button @click="goTo('/my-participations')">Participările mele</button>
+        <button @click="goTo('/chat')">VibeTalk</button>
         <button class="logout" @click="logout">Logout</button>
+        <button class="delete-account" @click="deleteAccount">💀 Gata cu FestivalGo</button>
         <div v-if="!preferredGenre" class="quiz-link" @click="goTo('/user/quiz-page')">
-           Nu știi ce ți se potrivește? Fă testul!
+          Nu știi ce ți se potrivește? Fă testul!
         </div>
       </nav>
     </aside>
@@ -25,7 +26,7 @@
       <p class="slogan">Vibe. Muzică. Haos organizat. Tu alegi cum trăiești festivalul!</p>
 
       <section v-if="festivalulLunii">
-        <h2> Festivalul lunii</h2>
+        <h2>Festivalul lunii</h2>
         <div class="card highlight" @click="goTo(`/festival/${festivalulLunii.id}`)">
           <img :src="`http://localhost:8081/uploads/${festivalulLunii.imagePath}`" alt="Festival imagine" />
           <div class="card-text">
@@ -53,7 +54,6 @@
 </template>
 
 <script setup>
-import backgroundImage from '../assets/image/welcome-page.png'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -76,6 +76,26 @@ const goTo = (path) => {
 const logout = () => {
   localStorage.clear()
   router.push('/login')
+}
+
+const deleteAccount = async () => {
+  const confirmDelete = confirm("Ești sigur că vrei să ștergi contul? Această acțiune este ireversibilă.")
+  if (!confirmDelete) return
+
+  try {
+    const response = await fetch(`http://localhost:8081/users/${userId}`, {
+      method: 'DELETE'
+    })
+
+    if (!response.ok) throw new Error('Eroare la ștergerea contului.')
+
+    alert('Contul tău a fost șters cu succes.')
+    localStorage.clear()
+    router.push('/login')
+  } catch (err) {
+    console.error('Eroare la ștergerea contului:', err)
+    alert('A apărut o eroare. Încearcă din nou.')
+  }
 }
 
 onMounted(async () => {
@@ -114,24 +134,24 @@ const festivalulLunii = computed(() => {
   position: relative;
 }
 
-/* Overlay */
 .overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 999;
 }
 
-/* Sidebar */
 aside {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   width: 280px;
   height: 100vh;
   background-color: #1a1a1d;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.8);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.8);
   padding: 20px;
   z-index: 1000;
   display: flex;
@@ -143,6 +163,12 @@ aside h2 {
   font-size: 24px;
   color: #bb86fc;
   text-align: center;
+}
+
+aside nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 aside button {
@@ -163,6 +189,20 @@ aside button:hover {
   color: #f87171;
 }
 
+.delete-account {
+  background-color: #7f1d1d;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delete-account:hover {
+  background-color: #b91c1c;
+}
+
 .quiz-link {
   background-color: #9f7aea;
   color: white;
@@ -175,15 +215,19 @@ aside button:hover {
 main {
   max-width: 1000px;
   margin: auto;
+  padding-left: 300px;
 }
 
 .menu-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1100;
   background: none;
   border: none;
   font-size: 28px;
   color: white;
   cursor: pointer;
-  margin-bottom: 20px;
 }
 
 main h1 {
@@ -225,7 +269,8 @@ section h2 {
   padding: 15px;
 }
 
-.card h3, .card h4 {
+.card h3,
+.card h4 {
   font-size: 20px;
   margin: 0 0 8px;
 }

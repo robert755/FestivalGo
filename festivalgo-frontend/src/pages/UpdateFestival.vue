@@ -44,6 +44,8 @@
           <option>URBAN</option>
           <option>POP</option>
           <option>FOLK</option>
+          <option>JAZZ</option>
+           <option>INDIE</option>
         </select>
 
         <label>Imagine nouă (opțional):</label>
