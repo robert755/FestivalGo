@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
-        // Criptăm parola înainte de a salva utilizatorul în baza de date
+        // Criptare
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getEmail().toLowerCase().endsWith("@festivalgo.com")) {
             user.setRole(Role.ADMIN);

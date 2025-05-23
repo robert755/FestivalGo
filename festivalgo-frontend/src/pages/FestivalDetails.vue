@@ -1,23 +1,23 @@
 <template>
   <div class="page-background">
     <div class="festival-detail-page">
-      <!-- Imagine festival -->
+    
       <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine Festival" class="festival-img" />
 
-      <!-- Nume festival -->
+    
       <h2>{{ festival.name }}</h2>
 
-      <!-- Informații -->
+    
       <div class="info-box">
         <p><strong>📍 Locație:</strong> {{ festival.location }}</p>
         <p><strong>📅 Perioadă:</strong> {{ formatDate(festival.startDate) }} – {{ formatDate(festival.endDate) }}</p>
         <p><strong>📝 Descriere:</strong> {{ festival.description }}</p>
       </div>
 
-      <!-- Hartă -->
+      
       <div id="map" class="map"></div>
 
-      <!-- Buton -->
+      
       <button class="btn" @click="participaLaFestival">🎟 Participă la acest festival</button>
     </div>
   </div>

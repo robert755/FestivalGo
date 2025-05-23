@@ -28,7 +28,7 @@ const errorMessage = ref("")
 
 const loadUsers = async () => {
   try {
-    const res = await axios.get('http://localhost:8081/users') // trebuie să ai un endpoint GET /users
+    const res = await axios.get('http://localhost:8081/users') 
     allUsers.value = res.data
   } catch (err) {
     console.error("Eroare la încărcarea utilizatorilor:", err)
@@ -103,12 +103,12 @@ button:hover {
 
 .success {
   margin-top: 10px;
-  color: #4ade80; /* verde deschis */
+  color: #4ade80; 
 }
 
 .error {
   margin-top: 10px;
-  color: #f87171; /* roșu pastelat */
+  color: #f87171; 
 }
 
 </style>

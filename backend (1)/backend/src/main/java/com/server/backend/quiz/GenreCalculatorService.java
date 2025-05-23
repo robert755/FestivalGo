@@ -14,9 +14,9 @@ public class GenreCalculatorService {
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
 
-    // ✅ Mapare cuvânt cheie → gen muzical
+    // Mapare cuvânt cheie → gen muzical
     private final Map<Genre, List<String>> keywordMap = Map.of(
-            Genre.ROCK, List.of("rock"),
+            Genre.ROCK, List.of("rock, chitara, nebunie"),
             Genre.EDM, List.of("electronică", "edm", "techno", "trance"),
             Genre.POP, List.of("pop", "radio", "mainstream"),
             Genre.URBAN, List.of("hip-hop", "rap", "urban"),
@@ -37,7 +37,7 @@ public class GenreCalculatorService {
             genreScores.put(genre, 0);
         }
 
-        // 2️⃣ Procesăm fiecare răspuns
+        // Procesam fiecare raspuns
         for (UserAnswerDTO dto : userAnswers) {
             Optional<Answer> optionalAnswer = answerRepository.findById(dto.getAnswerId());
             if (optionalAnswer.isEmpty()) continue;
@@ -52,13 +52,13 @@ public class GenreCalculatorService {
             }
         }
 
-        // 3️⃣ Alegem genul cu cel mai mare scor
+        // Alegem genul cu cel mai mare scor
         Genre calculatedGenre = genreScores.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
-        // 4️⃣ Salvăm genul în profilul utilizatorului
+        // Salvam genul in profilul utilizatorului
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -69,7 +69,7 @@ public class GenreCalculatorService {
         return calculatedGenre;
     }
 
-    // 🔍 Funcție îmbunătățită: caută cuvinte cheie din întrebări
+    // caută cuvinte cheie din întrebări
     private Genre mapQuestionToGenre(String questionText) {
         String lowerText = questionText.toLowerCase();
         for (Map.Entry<Genre, List<String>> entry : keywordMap.entrySet()) {

@@ -25,6 +25,7 @@
       <h1>Salut, {{ username }}!</h1>
       <p class="slogan">Vibe. Muzică. Haos organizat. Tu alegi cum trăiești festivalul!</p>
 
+      <!-- Festivalul lunii -->
       <section v-if="festivalulLunii">
         <h2>Festivalul lunii</h2>
         <div class="card highlight" @click="goTo(`/festival/${festivalulLunii.id}`)">
@@ -36,10 +37,11 @@
         </div>
       </section>
 
+      <!-- Recomandări -->
       <section v-if="preferredGenre && recomandari.length">
         <h2>🎧 Recomandări pentru tine ({{ preferredGenre }})</h2>
         <div class="recommendations">
-          <div class="card" v-for="festival in recomandari" :key="festival.id">
+          <div class="card recomandare" v-for="festival in recomandari" :key="festival.id">
             <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" />
             <div class="card-text">
               <h4>{{ festival.name }}</h4>
@@ -247,57 +249,106 @@ section h2 {
   margin-bottom: 16px;
 }
 
+/* Festivalul lunii */
 .card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   background-color: rgba(255, 255, 255, 0.06);
   border-radius: 16px;
   overflow: hidden;
   transition: transform 0.2s ease;
   margin-bottom: 24px;
+  max-height: 220px;
 }
 
-.card:hover {
-  transform: scale(1.02);
-}
-
-.card img {
-  width: 100%;
-  height: 200px;
+.card.highlight img {
+  width: 220px;
+  height: 100%;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .card-text {
-  padding: 15px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 }
 
-.card h3,
-.card h4 {
-  font-size: 20px;
-  margin: 0 0 8px;
+.card h3, .card h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
 }
 
 .card p {
+  font-size: 13px;
   color: #a1a1aa;
-  font-size: 14px;
 }
 
 .card button {
-  margin-top: 10px;
+  margin-top: 8px;
   background-color: #9f7aea;
   color: white;
   border: none;
-  padding: 8px 12px;
+  padding: 6px 14px;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
+  width: auto;
+  align-self: flex-start;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .card button:hover {
   background-color: #7c3aed;
+  transform: scale(1.05);
 }
 
+/* Recomandări – carduri mici */
 .recommendations {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.card.recomandare {
+  flex-direction: column;
+  max-width: 200px;
+  max-height: 300px;
+  text-align: center;
+}
+
+.card.recomandare img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.card.recomandare .card-text {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card.recomandare h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.card.recomandare p {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.card.recomandare button {
+  margin-top: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  align-self: center;
 }
 </style>

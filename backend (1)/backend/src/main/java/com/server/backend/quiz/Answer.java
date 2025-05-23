@@ -18,11 +18,10 @@ public class Answer {
     @JsonIgnore
     private Question question;  // Legătura cu întrebarea
 
-    // Constructor fără parametri
     public Answer() {
     }
 
-    // Constructor cu parametri
+
     public Answer(String answerText, Integer score) {
         this.answerText = answerText;
         this.score = score;

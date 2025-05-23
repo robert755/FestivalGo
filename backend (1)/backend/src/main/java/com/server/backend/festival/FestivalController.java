@@ -37,13 +37,13 @@ public class FestivalController {
         }
     }
 
-    // GET - Obține toate Festivalurile
+    // GET
     @GetMapping
     public List<Festival> getAllFestivals() {
         return festivalService.getAllFestivals();
     }
 
-    // GET - Obține un Festival după ID
+    // GET  dupa ID
     @GetMapping("/{id}")
     public ResponseEntity<Festival> getFestivalById(@PathVariable Integer id) {
         Optional<Festival> festival = festivalService.getFestivalById(id);
@@ -54,7 +54,7 @@ public class FestivalController {
         }
     }
 
-    // PUT - Actualizează un Festival
+    // PUT actualiz
     @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
     public ResponseEntity<Festival> updateFestival(
             @PathVariable Integer id,
@@ -96,7 +96,7 @@ public class FestivalController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    // DELETE - Șterge un Festival
+    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFestival(@PathVariable Integer id) {
         festivalService.deleteFestival(id);

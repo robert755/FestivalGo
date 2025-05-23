@@ -24,8 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
             }
         };
     }
-
-    // ✅ Adăugăm handler pentru fișiere statice din uploads/
+    
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         Path uploadDir = Paths.get("uploads");

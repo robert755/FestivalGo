@@ -93,7 +93,7 @@ const anuleazaParticipare = async (id) => {
   gap: 24px;
 }
 
-/* Card stil HBO Max */
+
 .card {
   display: flex;
   border-radius: 16px;

@@ -2,20 +2,19 @@
   <div class="festival-page">
     <h1 class="title">🎶 Festival Explorer</h1>
 
-    <!-- 🔍 Căutare -->
     <input
       v-model="searchQuery"
       placeholder="Caută festival..."
       class="search"
     />
 
-    <!-- 📅 Filtrare după perioadă -->
+    
     <div class="date-filter">
       <input type="date" v-model="startDate" class="date-input" />
       <input type="date" v-model="endDate" class="date-input" />
     </div>
 
-    <!-- 🎧 Secțiuni pe vibe-uri -->
+  
     <div v-for="vibe in vibes" :key="vibe" class="vibe-section">
       <h2 class="vibe-title">{{ vibeLabels[vibe] }}</h2>
       <div v-if="festivalsByVibe[vibe].length > 0" class="festival-row">
@@ -56,9 +55,9 @@ const userId = localStorage.getItem('userId')
 const vibes = ['relax', 'energetic', 'underground']
 
 const vibeLabels = {
-  relax: '🌅 Relax & Sunset Vibes',
-  energetic: '⚡ Energetic & Party Vibes',
-  underground: '🎧 Underground & Indie'
+  relax: ' Relax & Sunset Vibes',
+  energetic: ' Energetic & Party Vibes',
+  underground: 'Underground & Indie'
 }
 
 const vibeMap = {
@@ -101,7 +100,7 @@ const festivalsByVibe = computed(() => {
   }
 
   const today = new Date()
-  today.setHours(0, 0, 0, 0) // ca să comparăm doar data, fără ora
+  today.setHours(0, 0, 0, 0) 
 
   for (const fest of festivals.value) {
     const festStart = new Date(fest.startDate)

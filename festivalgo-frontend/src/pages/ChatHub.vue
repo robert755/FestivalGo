@@ -73,8 +73,8 @@ onMounted(() => {
 <style scoped>
 .chat-hub-container {
   display: flex;
-  height: 100vh; /* Ocupă 100% din înălțimea ecranului */
-  width: 100vw;  /* Ocupă 100% din lățimea ecranului */
+  height: 100vh; 
+  width: 100vw;  
   background-color: #1c1c1e;
   font-family: 'Segoe UI', sans-serif;
   color: white;

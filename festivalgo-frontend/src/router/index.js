@@ -5,13 +5,14 @@ import WelcomePage from '../pages/WelcomePage.vue'
 import FestivalList from '../pages/FestivalList.vue'
 import AdminPage from '../pages/AdminPage.vue'
 import Add_Festival from '../pages/Add_Festival.vue'
-import FestivalMap from '../pages/FestivalMap.vue' // ⬅️ nou
+import FestivalMap from '../pages/FestivalMap.vue' 
 import FestivalDetails from '../pages/FestivalDetails.vue'
 import UserParticipations from '../pages/UserParticipations.vue'
 import UpdateFestival from '../pages/UpdateFestival.vue'
 import QuestionAdmin from '../pages/QuestionAdmin.vue'
 import QuizPage from '../pages/QuizPage.vue'
 import ChatHub from '../pages/ChatHub.vue'
+
 
 
 const routes = [
@@ -28,9 +29,8 @@ const routes = [
   {path: '/admin/festival/updatefestival',component:UpdateFestival,props:true,meta: {requiresAuth:true,role:'ADMIN'}},
   {path:'/admin/questionmanager',component:QuestionAdmin,props:true,meta:{requiresAuth:true,role:'ADMIN'}},
   {path:'/user/quiz-page',component:QuizPage,props:true,meta:{requiresAuth:true,role:"USER"}},
-  { path: '/chat', component: ChatHub, meta: { requiresAuth: true, role: 'USER' } 
-}
-
+  { path: '/chat', component: ChatHub, meta: { requiresAuth: true, role: 'USER' }}
+  
 
 ]
 
