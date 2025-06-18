@@ -25,12 +25,13 @@ public class FestivalController {
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
             @RequestParam("genre") Genre genre,
+            @RequestParam("price") Double price,
             @RequestParam("image") MultipartFile imageFile) {
 
         try {
             String imagePath = festivalService.saveImage(imageFile);
             Festival newFestival = new Festival(name, location, description,
-                    LocalDate.parse(startDate), LocalDate.parse(endDate), genre, imagePath);
+                    LocalDate.parse(startDate), LocalDate.parse(endDate), genre, imagePath, price);
             return new ResponseEntity<>(festivalService.createFestival(newFestival), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +65,8 @@ public class FestivalController {
             @RequestParam("startDate") String startDate,
             @RequestParam("endDate") String endDate,
             @RequestParam("genre") Genre genre,
-            @RequestParam(value = "image", required = false) MultipartFile imageFile
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
+             @RequestParam("price") Double price
     ) {
         try {
             String imagePath = null;
@@ -80,7 +82,8 @@ public class FestivalController {
                     LocalDate.parse(startDate),
                     LocalDate.parse(endDate),
                     genre,
-                    imagePath // poate fi null → se tratează în service
+                    imagePath, // poate fi null → se tratează în service
+                    price
             );
 
             Festival result = festivalService.updateFestival(id, updatedFestival);

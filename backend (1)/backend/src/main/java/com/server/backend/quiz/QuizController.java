@@ -25,4 +25,12 @@ public class QuizController {
         return quizService.getAllQuestions();
     }
 
+    @DeleteMapping("/questions/{id}")
+    public void deleteQuestion(@PathVariable Integer id) {
+        quizService.deleteQuestion(id);
+    }
+
+
+
+
 }

@@ -7,8 +7,9 @@
       <input v-model="startDate" type="date" class="input" required />
       <input v-model="endDate" type="date" class="input" required />
       <input v-model="description" placeholder="Descriere" class="input" required />
+      
+      <input v-model="price" type="number" placeholder="Preț bilet (RON)" class="input" required /> <!-- ✅ -->
 
-      <!-- Input pentru fișier (imagine) -->
       <input type="file" @change="handleImageUpload" class="input" accept="image/*" required />
 
       <label for="genre">Gen muzical:</label>
@@ -19,7 +20,7 @@
         <option value="POP">Pop</option>
         <option value="FOLK">Folk</option>
         <option value="JAZZ">Jazz</option>
-        <option value=" INDIE">Indie</option>
+        <option value="INDIE">Indie</option>
       </select>
 
       <button type="submit" class="btn">Creează festival</button>
@@ -39,9 +40,9 @@ const startDate = ref('')
 const endDate = ref('')
 const description = ref('')
 const genre = ref('ROCK')
+const price = ref('') // ✅
 const imageFile = ref(null)
 
-// Preluarea fișierului selectat din input
 const handleImageUpload = (event) => {
   imageFile.value = event.target.files[0]
 }
@@ -55,6 +56,7 @@ const submitFestival = async () => {
     formData.append('endDate', endDate.value)
     formData.append('description', description.value)
     formData.append('genre', genre.value)
+    formData.append('price', price.value) // ✅
     formData.append('image', imageFile.value)
 
     const res = await axios.post('http://localhost:8081/festivals/post', formData, {
@@ -74,25 +76,67 @@ const submitFestival = async () => {
 </script>
 
 <style scoped>
+/* ===== Container general ===== */
 .add-festival {
   max-width: 600px;
-  margin: auto;
-  padding: 2rem;
+  margin: 0 auto;
+  padding: 32px 20px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
+/* ===== Titlu ===== */
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* ===== Inputuri ===== */
 .input {
-  display: block;
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.btn {
-  padding: 0.5rem 1rem;
-  background-color: #2563eb;
-  color: white;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
   border: none;
-  border-radius: 6px;
+  border-bottom: 2px solid #ccc;
+  background-color: transparent;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4285f4;
+}
+
+/* ===== Label pentru gen muzical ===== */
+label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: block;
+  color: #444;
+}
+
+/* ===== Buton ===== */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #4285f4;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.btn:hover {
+  background-color: #3367d6;
 }
 </style>
+

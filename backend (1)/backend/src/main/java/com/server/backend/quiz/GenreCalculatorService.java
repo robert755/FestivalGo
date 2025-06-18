@@ -16,13 +16,13 @@ public class GenreCalculatorService {
 
     // Mapare cuvânt cheie → gen muzical
     private final Map<Genre, List<String>> keywordMap = Map.of(
-            Genre.ROCK, List.of("rock, chitara, nebunie"),
-            Genre.EDM, List.of("electronică", "edm", "techno", "trance"),
-            Genre.POP, List.of("pop", "radio", "mainstream"),
-            Genre.URBAN, List.of("hip-hop", "rap", "urban"),
-            Genre.FOLK, List.of("folk", "chitară", "acustic", "tradițional"),
-            Genre.JAZZ, List.of("jazz", "blues", "swing", "saxofon"),
-            Genre.INDIE, List.of("indie", "alternativ", "artistic", "independent")
+            Genre.ROCK, List.of("expresivă","propriul drum", "intens"),
+            Genre.EDM, List.of("energie","alert", "spontaneitate"),
+            Genre.POP, List.of("popular", "grup", "armonia"),
+            Genre.URBAN, List.of("încrezător", "competiția", "stilul personal"),
+            Genre.FOLK, List.of("autentice", "natură", "profunzimea"),
+            Genre.JAZZ, List.of("eleganța", "flexibilitatea", "competitivă"),
+            Genre.INDIE, List.of("creativ", "neobișnuite", "grupuri mici")
     );
 
     public GenreCalculatorService(AnswerRepository answerRepository, UserRepository userRepository) {

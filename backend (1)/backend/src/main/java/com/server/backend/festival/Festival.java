@@ -17,12 +17,13 @@ public class Festival {
     private String name;
 
     private String location;
-
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private LocalDate startDate;
     private LocalDate endDate;
     private String imagePath;
+    private Double price;
     @Enumerated(EnumType.STRING)
       private Genre  genre;
     // Constructor fără parametri
@@ -30,7 +31,7 @@ public class Festival {
     }
 
     // Constructor cu parametri
-    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate,Genre genre,String imagePath) {
+    public Festival(String name, String location, String description, LocalDate startDate, LocalDate endDate,Genre genre,String imagePath, Double price) {
         this.name = name;
         this.location = location;
         this.description = description;
@@ -38,6 +39,7 @@ public class Festival {
         this.endDate = endDate;
         this.genre= genre;
         this.imagePath=imagePath;
+        this.price= price;
     }
 
     // Getters și Setters
@@ -99,6 +101,14 @@ public class Festival {
     public String getImagePath() {
         return imagePath;
     }
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;

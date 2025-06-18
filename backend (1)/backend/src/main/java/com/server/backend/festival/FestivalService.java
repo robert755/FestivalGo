@@ -31,6 +31,7 @@ public class FestivalService {
         newFestival.setEndDate(festival.getEndDate());
         newFestival.setImagePath(festival.getImagePath());
         newFestival.setGenre(festival.getGenre());
+        newFestival.setPrice(festival.getPrice());
         // Salvează obiectul 'newFestival' în baza de date
         return festivalRepository.save(newFestival);
     }
@@ -73,6 +74,7 @@ public class FestivalService {
             if (festivalDetails.getImagePath() != null) {
                 festival.setImagePath(festivalDetails.getImagePath());
             }
+            festival.setPrice(festivalDetails.getPrice());
 
             return festivalRepository.save(festival);
         }

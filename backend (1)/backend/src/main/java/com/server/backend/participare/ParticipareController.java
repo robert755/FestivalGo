@@ -15,7 +15,7 @@ public class ParticipareController {
         this.participareService = participareService;
     }
 
-    @GetMapping
+    @GetMapping("admin/all")
     public List<Participare> getAllParticipari() {
         return participareService.getAllParticipari();
     }
@@ -37,4 +37,13 @@ public class ParticipareController {
         Participare participare = participareService.actualizeazaStatusParticipare(id);
         return ResponseEntity.ok(participare);
     }
+    @PostMapping("/confirmare-bilet")
+    public ResponseEntity<?> confirmaBilet(
+            @RequestParam Integer userId,
+            @RequestParam Integer festivalId
+    ) {
+        participareService.confirmaBiletCumparat(userId, festivalId);
+        return ResponseEntity.ok("Bilet confirmat.");
+    }
+
 }

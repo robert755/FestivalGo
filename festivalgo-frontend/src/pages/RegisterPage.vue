@@ -4,15 +4,24 @@
       <h2 class="form-title">Înregistrare FestivalGo</h2>
 
       <input v-model="form.username" type="text" placeholder="Username" required class="form-input" />
+      <p v-if="errors.username" class="field-error">{{ errors.username }}</p>
+
       <input v-model="form.email" type="email" placeholder="Email" required class="form-input" />
-      <input v-model="form.password" type="password" placeholder="Parolă" required class="form-input" />
+      <p v-if="errors.email" class="field-error">{{ errors.email }}</p>
+
+      <input v-model="form.password" type="password" placeholder="Parolă(cel putin 6 caractere)" required class="form-input" />
+      <p v-if="errors.password" class="field-error">{{ errors.password }}</p>
+
       <input v-model="form.firstName" type="text" placeholder="Prenume" required class="form-input" />
+      <p v-if="errors.firstName" class="field-error">{{ errors.firstName }}</p>
+
       <input v-model="form.lastName" type="text" placeholder="Nume" required class="form-input" />
+      <p v-if="errors.lastName" class="field-error">{{ errors.lastName }}</p>
 
       <button type="submit" class="form-button">Înregistrează-te</button>
 
+      <p v-if="errors.global" class="error-message">{{ errors.global }}</p>
       <p v-if="success" class="success-message">Cont creat cu succes!</p>
-      <p v-if="error" class="error-message">{{ error }}</p>
     </form>
   </div>
 </template>
@@ -31,16 +40,43 @@ const form = ref({
 })
 
 const success = ref(false)
-const error = ref(null)
+const errors = ref({})
 
 const register = async () => {
   try {
     await axios.post('http://localhost:8081/users/register', form.value)
     success.value = true
-    error.value = null
+    errors.value = {}
   } catch (err) {
     success.value = false
-    error.value = 'Înregistrarea a eșuat. Verifică datele introduse.'
+    console.log('BACKEND RESPONSE:', err.response?.data)
+
+    const backendData = err.response?.data
+    const fieldErrors = {}
+
+    // Dacă este o listă de stringuri "field: mesaj"
+    if (Array.isArray(backendData)) {
+      backendData.forEach(msg => {
+        const [field, ...rest] = msg.split(':')
+        const key = field.trim()
+        const message = rest.join(':').trim()
+        fieldErrors[key] = message
+      })
+    }
+
+    // Dacă este un obiect de forma { "field": "mesaj" }
+    else if (typeof backendData === 'object' && backendData !== null) {
+      Object.entries(backendData).forEach(([key, value]) => {
+        fieldErrors[key] = value
+      })
+    }
+
+    // Dacă e altceva neașteptat
+    else {
+      fieldErrors.global = 'Înregistrarea a eșuat. Verifică datele introduse.'
+    }
+
+    errors.value = fieldErrors
     console.error(err)
   }
 }
@@ -125,5 +161,13 @@ const register = async () => {
   margin-top: 1rem;
   text-align: center;
   font-weight: 500;
+}
+
+.field-error {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin-top: -0.75rem;
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
 }
 </style>

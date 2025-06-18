@@ -45,8 +45,11 @@
           <option>POP</option>
           <option>FOLK</option>
           <option>JAZZ</option>
-           <option>INDIE</option>
+          <option>INDIE</option>
         </select>
+
+        <label>Preț bilet (RON):</label>
+        <input type="number" v-model="festival.price" />
 
         <label>Imagine nouă (opțional):</label>
         <input type="file" @change="handleImageUpload" accept="image/*" />
@@ -98,6 +101,7 @@ export default {
         startDate: '',
         endDate: '',
         genre: '',
+        price: 0,
         imagePath: ''
       },
       imageFile: null,
@@ -167,6 +171,7 @@ export default {
       formData.append('startDate', this.festival.startDate)
       formData.append('endDate', this.festival.endDate)
       formData.append('genre', this.festival.genre)
+      formData.append('price', this.festival.price)
       if (this.imageFile) {
         formData.append('image', this.imageFile)
       }
@@ -187,7 +192,7 @@ export default {
           alert('Festival șters')
           this.festival = {
             id: null, name: '', location: '', description: '',
-            startDate: '', endDate: '', genre: '', imagePath: ''
+            startDate: '', endDate: '', genre: '', price: 0, imagePath: ''
           }
           this.incarcaFestivaluri()
         })
@@ -197,75 +202,148 @@ export default {
       axios.put(`http://localhost:8081/map-points/update/${this.festival.id}`, this.puncte)
         .then(() => alert('✅ Punctele au fost salvate!'))
         .catch(e => {
-          console.log('Eroare la salvare puncte:', e)
+          console.log('Eroare la salvare puncte!', e)
           alert('Eroare la salvarea punctelor!')
         })
     }
   }
 }
 </script>
-
 <style scoped>
+/* ===== Layout General ===== */
 .container {
   max-width: 800px;
-  margin: auto;
-  padding: 2rem;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
 }
+
+/* ===== Titluri ===== */
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 20px 0 10px;
+}
+
+/* ===== Lista Festivaluri ===== */
 .festival-lista {
-  margin-bottom: 1rem;
+  margin-bottom: 24px;
 }
+
 .buton-festival {
-  margin: 5px;
-  padding: 6px 12px;
-  border: 1px solid #aaa;
-  border-radius: 5px;
-  background-color: white;
+  margin: 6px 6px 6px 0;
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
+
 .buton-festival:hover {
   background-color: #e0f0ff;
 }
-input, textarea, select {
-  display: block;
+
+/* ===== Formularul ===== */
+.formular {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+input,
+textarea,
+select {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.buton-salveaza, .buton-sterge {
-  padding: 10px 15px;
-  margin-top: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 14px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-bottom: 2px solid #ccc;
+  background-color: transparent;
+  transition: border-color 0.2s;
+  outline: none;
 }
-.buton-salveaza {
-  background-color: #4caf50;
-  color: white;
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #4285f4;
 }
+
+/* ===== Butoane de acțiune ===== */
+.buton-salveaza,
 .buton-sterge {
-  margin-left: 10px;
-  background-color: #e53935;
+  padding: 10px 16px;
+  font-size: 14px;
+  margin-top: 8px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buton-salveaza {
+  background-color: #34a853;
   color: white;
 }
+
+.buton-salveaza:hover {
+  background-color: #1e8e3e;
+}
+
+.buton-sterge {
+  background-color: #ea4335;
+  color: white;
+}
+
+.buton-sterge:hover {
+  background-color: #c5221f;
+}
+
+/* ===== Imagine previzualizare ===== */
+img {
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* ===== Hartă Leaflet ===== */
 .map {
   width: 100%;
   height: 400px;
+  margin-top: 16px;
+  border-radius: 8px;
   border: 2px solid #ccc;
-  margin-top: 1rem;
 }
+
+/* ===== Selector emoji și puncte ===== */
 .emoji-selector {
-  margin-top: 1rem;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
 .emoji-icon {
   font-size: 22px;
   text-align: center;
 }
+
 .emoji-label {
   font-size: 11px;
   background-color: #ffffffcc;
-  padding: 2px 4px;
+  padding: 2px 6px;
   border-radius: 4px;
   display: inline-block;
   margin-top: 2px;

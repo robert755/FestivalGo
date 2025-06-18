@@ -3,6 +3,10 @@ package com.server.backend.user;
 import com.server.backend.festival.Genre;
 import com.server.backend.participare.Participare;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -12,9 +16,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank(message = "Username-ul nu poate fi gol")
+    @Size(min = 3, max = 20, message = "Username-ul trebuie să aibă între 3 și 20 de caractere")
     private String username;
-
+    @NotBlank(message = "Email-ul nu poate fi gol")
+    @Email(message = "Email invalid")
     private String email;
+    @NotBlank(message = "Parola nu poate fi goală")
+    @Size(min = 6, message = "Parola trebuie să aibă cel puțin 6 caractere")
     private String password;
     private String firstName;
     private String lastName;

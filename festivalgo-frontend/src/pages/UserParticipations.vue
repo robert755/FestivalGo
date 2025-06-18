@@ -12,18 +12,28 @@
         v-for="p in participari"
         :key="p.id"
       >
-        <!-- Imagine stânga -->
         <img
           :src="`http://localhost:8081/uploads/${p.festival.imagePath}`"
           alt="Festival"
           class="card-img"
         />
 
-        <!-- Informații dreapta -->
         <div class="card-info">
           <h2>{{ p.festival?.name || 'Festival șters' }}</h2>
           <p>{{ p.festival?.startDate }} – {{ p.festival?.endDate }}</p>
-          <button @click="anuleazaParticipare(p.id)">Te-ai răzgândit?</button>
+
+          <template v-if="p.status === 'PARTICIPA'">
+            <button @click="anuleazaParticipare(p.id)">Te-ai răzgândit?</button>
+            <button @click="cumparaBilet(p.festival.id, p.user.id)">Cumpără bilet</button>
+          </template>
+
+          <template v-else-if="p.status === 'BILET_CUMPARAT'">
+            <button disabled>Bilet cumpărat</button>
+          </template>
+
+          <template v-else-if="p.status === 'ANULAT'">
+            <button @click="cumparaBilet(p.festival.id, p.user.id)">Cumpără bilet</button>
+          </template>
         </div>
       </div>
     </div>
@@ -56,6 +66,26 @@ const anuleazaParticipare = async (id) => {
     participari.value = participari.value.filter(p => p.id !== id)
   } catch (err) {
     console.error('Eroare la anularea participării:', err)
+  }
+}
+
+const cumparaBilet = async (festivalId, userId) => {
+  try {
+    const successUrl = window.location.origin + '/payment-success'
+
+    // ✅ Salvăm local user și festival înainte de redirect
+    localStorage.setItem('pendingUserId', userId)
+    localStorage.setItem('pendingFestivalId', festivalId)
+
+    const response = await axios.post('http://localhost:8081/api/payment/checkout-session', null, {
+      params: { festivalId, userId, successUrl }
+    })
+
+    const { url } = response.data
+    window.location.href = url
+  } catch (error) {
+    alert('Eroare la inițierea plății.')
+    console.error(error)
   }
 }
 </script>
@@ -93,7 +123,6 @@ const anuleazaParticipare = async (id) => {
   gap: 24px;
 }
 
-
 .card {
   display: flex;
   border-radius: 16px;
@@ -101,7 +130,7 @@ const anuleazaParticipare = async (id) => {
   background-color: rgba(255, 255, 255, 0.05);
   box-shadow: 0 0 16px rgba(187, 134, 252, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
+  width: 90%;
 }
 
 .card:hover {
@@ -151,5 +180,9 @@ const anuleazaParticipare = async (id) => {
 .card-info button:hover {
   background-color: #dc2626;
 }
-</style>
 
+.card-info button[disabled] {
+  background-color: #6b7280;
+  cursor: default;
+}
+</style>

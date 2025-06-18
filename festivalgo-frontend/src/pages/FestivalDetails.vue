@@ -1,24 +1,28 @@
 <template>
   <div class="page-background">
     <div class="festival-detail-page">
-    
+
+      <!-- Imagine -->
       <img :src="`http://localhost:8081/uploads/${festival.imagePath}`" alt="Imagine Festival" class="festival-img" />
 
-    
+      <!-- Nume -->
       <h2>{{ festival.name }}</h2>
 
-    
+      <!-- Info festival -->
       <div class="info-box">
         <p><strong>📍 Locație:</strong> {{ festival.location }}</p>
         <p><strong>📅 Perioadă:</strong> {{ formatDate(festival.startDate) }} – {{ formatDate(festival.endDate) }}</p>
         <p><strong>📝 Descriere:</strong> {{ festival.description }}</p>
+        <p><strong>💰 Preț bilet:</strong> {{ festival.price }} RON</p>
       </div>
 
-      
+      <!-- Hartă -->
       <div id="map" class="map"></div>
 
-      
+      <!-- Butoane -->
       <button class="btn" @click="participaLaFestival">🎟 Participă la acest festival</button>
+      <button class="btn" @click="cumparaBiletRedirect">💳 Cumpără bilet</button>
+
     </div>
   </div>
 </template>
@@ -28,10 +32,12 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import L from 'leaflet'
+import { loadStripe } from '@stripe/stripe-js'
 
 const route = useRoute()
 const festival = ref({})
 const mapPoints = ref([])
+const stripePromise = loadStripe("pk_test_51RbH2906WexVnL31CkKYB9wIJlgJRVmBlLtBXZhRKXd7ou5Jr3zcqNn6IouZsrzjtC3gCKJnDXHs5CkFRVUC8uaW00eq0kr27X") // înlocuiește cu cheia ta Stripe publică reală
 
 const formatDate = (dateString) => {
   const date = new Date(dateString)
@@ -74,6 +80,7 @@ onMounted(async () => {
     } else {
       map.setView([46.770439, 23.591423], 13)
     }
+
   } catch (err) {
     console.error('Eroare la încărcarea datelor:', err)
   }
@@ -89,14 +96,42 @@ const participaLaFestival = async () => {
   }
 
   try {
-    await axios.post(`http://localhost:8081/participari/adauga?userId=${userId}&festivalId=${festivalId}`, {
-      userId,
-      festivalId
-    })
+    await axios.post(`http://localhost:8081/participari/adauga?userId=${userId}&festivalId=${festivalId}`)
     alert('Participarea a fost înregistrată cu succes!')
   } catch (err) {
     console.error('Eroare la participare:', err)
     alert('A apărut o eroare. Încearcă din nou.')
+  }
+}
+
+const cumparaBiletRedirect = async () => {
+  const userId = localStorage.getItem('userId')
+  const festivalId = route.params.id
+
+  if (!userId) {
+    alert('Trebuie să fii logat pentru a cumpăra bilet.')
+    return
+  }
+
+  try {
+    const response = await axios.post('http://localhost:8081/api/payment/checkout-session', null, {
+      params: {
+        userId,
+        festivalId,
+        successUrl: 'http://localhost:5173/payment-success'
+      }
+    })
+
+    // Salvează pentru confirmarea statusului după plată
+    localStorage.setItem('pendingUserId', userId)
+    localStorage.setItem('pendingFestivalId', festivalId)
+
+    const stripe = await stripePromise
+    window.location.href = response.data.url
+
+  } catch (err) {
+    console.error('Eroare la inițierea plății:', err)
+    alert('A apărut o problemă. Încearcă din nou.')
   }
 }
 </script>
@@ -161,7 +196,7 @@ strong {
   border-radius: 10px;
   border: none;
   display: block;
-  margin: 2rem auto 0 auto;
+  margin: 1.2rem auto;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -170,6 +205,7 @@ strong {
 .btn:hover {
   background-color: #dc2626;
 }
+
 .emoji-icon {
   font-size: 32px;
   text-align: center;
@@ -188,5 +224,4 @@ strong {
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
   display: inline-block;
 }
-
 </style>

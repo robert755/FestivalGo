@@ -2,6 +2,7 @@ package com.server.backend.user;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user) {
+    public String registerUser(@Valid @RequestBody User user) {
         // Criptare
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (user.getEmail().toLowerCase().endsWith("@festivalgo.com")) {
@@ -43,13 +44,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest servletRequest) {
-        String clientIp = servletRequest.getRemoteAddr(); // sau request.getUsername() dacă vrei per utilizator
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, org.springframework.validation.BindingResult result, HttpServletRequest servletRequest) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        String clientIp = servletRequest.getRemoteAddr();
 
         if (!rateLimiterService.isAllowed(clientIp)) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
                     .body("Prea multe încercări. Încearcă din nou peste un minut.");
         }
+
         User user = userService.findByUsername(request.getUsername());
 
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -58,11 +67,11 @@ public class UserController {
             response.put("username", user.getUsername());
             response.put("role", user.getRole());
             return ResponseEntity.ok(response);
-        }
-        else {
+        } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autentificare eșuată!");
         }
     }
+
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

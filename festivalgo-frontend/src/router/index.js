@@ -12,6 +12,7 @@ import UpdateFestival from '../pages/UpdateFestival.vue'
 import QuestionAdmin from '../pages/QuestionAdmin.vue'
 import QuizPage from '../pages/QuizPage.vue'
 import ChatHub from '../pages/ChatHub.vue'
+import PaymentSuccess from '../pages/PaymentSuccess.vue'
 
 
 
@@ -29,7 +30,8 @@ const routes = [
   {path: '/admin/festival/updatefestival',component:UpdateFestival,props:true,meta: {requiresAuth:true,role:'ADMIN'}},
   {path:'/admin/questionmanager',component:QuestionAdmin,props:true,meta:{requiresAuth:true,role:'ADMIN'}},
   {path:'/user/quiz-page',component:QuizPage,props:true,meta:{requiresAuth:true,role:"USER"}},
-  { path: '/chat', component: ChatHub, meta: { requiresAuth: true, role: 'USER' }}
+  { path: '/chat', component: ChatHub, meta: { requiresAuth: true, role: 'USER' }},
+  {path: '/payment-success', component: PaymentSuccess,meta: { requiresAuth: true, role: 'USER' }}
   
 
 ]

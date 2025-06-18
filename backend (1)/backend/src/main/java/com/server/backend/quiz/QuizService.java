@@ -28,5 +28,12 @@ public class QuizService {
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
+    @Transactional
+    public void deleteQuestion(Integer id) {
+        questionRepository.deleteById(id);
+    }
+
+
+
 
 }

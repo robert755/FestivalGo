@@ -83,4 +83,31 @@ public class ParticipareService {
         participare.setStatus(Status.ANULAT);
         return participareRepository.save(participare);
     }
+    @Transactional
+    public void confirmaBiletCumparat(Integer userId, Integer festivalId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Festival festival = festivalRepository.findById(festivalId).orElseThrow();
+
+        List<Participare> existente = participareRepository.findByUserIdAndFestivalId(userId, festivalId);
+
+        // Caută o participare care nu este ANULATĂ
+        Participare participareValida = existente.stream()
+                .filter(p -> p.getStatus() != Status.ANULAT)
+                .findFirst()
+                .orElse(null);
+
+        if (participareValida != null) {
+            participareValida.setStatus(Status.CUMPARAT);
+            participareRepository.save(participareValida);
+        } else {
+            // Dacă toate sunt ANULATE sau nu există deloc, creează una nouă
+            Participare noua = new Participare();
+            noua.setUser(user);
+            noua.setFestival(festival);
+            noua.setStatus(Status.CUMPARAT);
+            participareRepository.save(noua);
+        }
+    }
+
+
 }
