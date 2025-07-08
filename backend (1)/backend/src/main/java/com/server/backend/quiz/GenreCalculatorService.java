@@ -52,11 +52,21 @@ public class GenreCalculatorService {
             }
         }
 
-        // Alegem genul cu cel mai mare scor
-        Genre calculatedGenre = genreScores.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
+        // Găsim scorul maxim
+        int maxScore = genreScores.values().stream()
+                .mapToInt(Integer::intValue)
+                .max()
+                .orElse(0);
+
+        // Colectăm toate genurile cu scorul maxim
+        List<Genre> topGenres = genreScores.entrySet().stream()
+                .filter(entry -> entry.getValue() == maxScore)
                 .map(Map.Entry::getKey)
-                .orElse(null);
+                .toList();
+
+        // Alegem random un gen din cele cu scorul maxim
+        Random random = new Random();
+        Genre calculatedGenre = topGenres.get(random.nextInt(topGenres.size()));
 
         // Salvam genul in profilul utilizatorului
         Optional<User> optionalUser = userRepository.findById(userId);

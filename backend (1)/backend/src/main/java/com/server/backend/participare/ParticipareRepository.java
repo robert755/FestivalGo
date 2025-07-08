@@ -16,6 +16,4 @@ public interface ParticipareRepository extends JpaRepository<Participare,Integer
     List<Participare> findParticipariByUserId(@Param("userId") Integer userId);
     boolean existsByUserIdAndFestivalIdAndStatus(Integer userId, Integer festivalId, Status status);
     List<Participare> findByUserIdAndFestivalId(Integer userId, Integer festivalId);
-    Optional<Participare> findByUserIdAndFestivalIdAndStatus(Integer userId, Integer festivalId, Status status);
-
 }

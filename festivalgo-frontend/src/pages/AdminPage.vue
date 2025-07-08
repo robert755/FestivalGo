@@ -15,7 +15,16 @@
 
     <!-- Conținut principal -->
     <main class="main-content">
-      <h1 class="text-3xl font-bold mb-4">Hello Admin 👋</h1>
+      <h1 class="text-3xl font-bold mb-4">Salut Admin</h1>
+      <div class="admin-rights mb-6">
+    <p class="text-gray-700 mb-2">Ca administrator în aplicația FestivalGo, poți:</p>
+    <ul class="list-disc list-inside text-gray-800">
+      <li>Adaugi festivaluri noi în platformă</li>
+      <li>Modifici detaliile unui festival existent</li>
+      <li>Gestionezi întrebările din chestionarul de recomandare</li>
+      <li>Vezi și actualizezi harta festivalurilor</li>
+    </ul>
+  </div>
       <router-view />
     </main>
   </div>

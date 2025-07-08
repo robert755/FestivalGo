@@ -12,7 +12,6 @@
         <button @click="goTo('/my-participations')">Participările mele</button>
         <button @click="goTo('/chat')">VibeTalk</button>
         <button class="logout" @click="logout">Logout</button>
-        <button class="delete-account" @click="deleteAccount">💀 Gata cu FestivalGo</button>
         <div v-if="!preferredGenre" class="quiz-link" @click="goTo('/user/quiz-page')">
           Nu știi ce ți se potrivește? Fă testul!
         </div>
@@ -78,26 +77,6 @@ const goTo = (path) => {
 const logout = () => {
   localStorage.clear()
   router.push('/login')
-}
-
-const deleteAccount = async () => {
-  const confirmDelete = confirm("Ești sigur că vrei să ștergi contul? Această acțiune este ireversibilă.")
-  if (!confirmDelete) return
-
-  try {
-    const response = await fetch(`http://localhost:8081/users/${userId}`, {
-      method: 'DELETE'
-    })
-
-    if (!response.ok) throw new Error('Eroare la ștergerea contului.')
-
-    alert('Contul tău a fost șters cu succes.')
-    localStorage.clear()
-    router.push('/login')
-  } catch (err) {
-    console.error('Eroare la ștergerea contului:', err)
-    alert('A apărut o eroare. Încearcă din nou.')
-  }
 }
 
 onMounted(async () => {
