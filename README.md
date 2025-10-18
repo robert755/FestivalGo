@@ -27,13 +27,6 @@ Aplicația permite utilizatorilor să:
 -  **Vue** pentru frontend
 -  **Leafet.js** pentru harti
 
-## Cum să rulezi aplicația
-
-1. **Configurează MySQL** - Creează baza de date `Festival__App`
-2. **Editează** `application.properties` cu datele tale de conectare
-3. **Rulează** cu `mvn spring-boot:run`
-4. **Accesează** aplicația la `http://localhost:8081`
-
 ## API Principal
 
 - `GET /festivals` - Lista festivaluri
