@@ -20,7 +20,7 @@ Aplicația permite utilizatorilor să:
 
 ## Tehnologii
 
-- **Java 23** + **Spring Boot**
+- **Java 17** + **Spring Boot**
 - **MySQL** pentru baza de date
 - **Stripe** pentru plăți
 - **Spring Security** pentru autentificare
